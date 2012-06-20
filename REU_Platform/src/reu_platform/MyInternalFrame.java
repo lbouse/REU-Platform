@@ -24,6 +24,10 @@ public class MyInternalFrame extends javax.swing.JInternalFrame {
         setBounds(50, 50, 100, 100);
         setVisible(true);
         AdminTools = AT;
+        this.resizable = true;
+        this.closable = true;
+        this.maximizable = true;
+        this.iconable = true;
     }
 
     /** This method is called from within the constructor to
