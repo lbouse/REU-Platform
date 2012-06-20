@@ -17,5 +17,6 @@ public class REU_Platform {
         // TODO code application logic here
         System.out.println("Maybe?");
         new CoolFrameTesting();
+        new PlatformControlCenter();
     }
 }
