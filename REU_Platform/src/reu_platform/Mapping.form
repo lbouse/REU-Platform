@@ -314,7 +314,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/reu_platform/blank02.png"/>
+                      <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\blank01.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="add local schema to column"/>
                     <Property name="focusable" type="boolean" value="false"/>
@@ -328,7 +328,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/reu_platform/blank02.png"/>
+                      <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\blank01.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="new column"/>
                   </Properties>
@@ -339,7 +339,7 @@
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/reu_platform/blank02.png"/>
+                      <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\blank01.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="delete column"/>
                     <Property name="focusable" type="boolean" value="false"/>
@@ -361,7 +361,7 @@
             <Component class="javax.swing.JButton" name="saveToolButton">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/reu_platform/save.png"/>
+                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\save.png"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Save"/>
                 <Property name="focusable" type="boolean" value="false"/>
@@ -372,7 +372,7 @@
             <Component class="javax.swing.JButton" name="jButton4">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/reu_platform/blank01.png"/>
+                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\blank01.png"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="New Project"/>
                 <Property name="focusable" type="boolean" value="false"/>
@@ -383,7 +383,7 @@
             <Component class="javax.swing.JButton" name="jButton5">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/reu_platform/blank02.png"/>
+                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\blank01.png"/>
                 </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Open Project"/>
                 <Property name="focusable" type="boolean" value="false"/>

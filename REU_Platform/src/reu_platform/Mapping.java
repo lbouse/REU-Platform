@@ -134,7 +134,7 @@ public class Mapping extends javax.swing.JFrame {
         jToolBar1.setRollover(true);
 
         jButton3.setBackground(new java.awt.Color(255, 255, 255));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reu_platform/blank02.png"))); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\blank01.png")); // NOI18N
         jButton3.setToolTipText("add local schema to column");
         jButton3.setFocusable(false);
         jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -142,12 +142,12 @@ public class Mapping extends javax.swing.JFrame {
         jToolBar1.add(jButton3);
 
         jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reu_platform/blank02.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\blank01.png")); // NOI18N
         jButton1.setToolTipText("new column");
         jToolBar1.add(jButton1);
 
         jButton2.setBackground(new java.awt.Color(255, 255, 255));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reu_platform/blank02.png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\blank01.png")); // NOI18N
         jButton2.setToolTipText("delete column");
         jButton2.setFocusable(false);
         jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -181,21 +181,21 @@ public class Mapping extends javax.swing.JFrame {
 
         jToolBar2.setRollover(true);
 
-        saveToolButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reu_platform/save.png"))); // NOI18N
+        saveToolButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\save.png")); // NOI18N
         saveToolButton.setToolTipText("Save");
         saveToolButton.setFocusable(false);
         saveToolButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         saveToolButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(saveToolButton);
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reu_platform/blank01.png"))); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\blank01.png")); // NOI18N
         jButton4.setToolTipText("New Project");
         jButton4.setFocusable(false);
         jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton4);
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reu_platform/blank02.png"))); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\blank01.png")); // NOI18N
         jButton5.setToolTipText("Open Project");
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
