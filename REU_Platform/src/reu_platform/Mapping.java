@@ -4,17 +4,57 @@
  */
 package reu_platform;
 
+//Includes
+import java.util.LinkedList;
+import javax.swing.JTree;
+import javax.swing.tree.*;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Bouse
  */
 public class Mapping extends javax.swing.JFrame {
 
+    //IDEK here's some stuff.
+    private LinkedList<javax.swing.JLabel> userSources = new LinkedList<javax.swing.JLabel>();
+    private int totalSources;
+    private DefaultTreeModel globalTree;
+    DefaultMutableTreeNode parent;
+    
     /**
      * Creates new form Mapping
      */
-    public Mapping() {
+    //Mapping( projectNameTxtField.getText(), tableNameTxtField.getText(),
+    //            userSources, userSources.size());
+    public Mapping( String name, String titl, 
+            LinkedList<javax.swing.JLabel> lst, int len){
         initComponents();
+        
+        totalSources = len;
+        //Copy linkedlist passed to constructor
+        for(int i = 0; i < totalSources; i++)
+        { userSources.add( lst.get(i) ); }
+        
+        //Set the title of the main frame to the Project name
+        setTitle( "PLATFORM - " + name);
+        
+        //Begin the construction of the tree.
+        parent = new DefaultMutableTreeNode(titl);
+        globalTree = new DefaultTreeModel(parent);
+        
+        //Tabs for the sources of Local Schema
+        //Will fill with actual content of each source later
+        for(int i = 0; i < totalSources; i++)
+        {
+            
+        }
+    }
+
+    private Mapping() {
+        initComponents();
+        
+        DefaultMutableTreeNode parent = new DefaultMutableTreeNode("Table");
+        globalTree = new DefaultTreeModel(parent);
     }
 
     /**
@@ -35,7 +75,7 @@ public class Mapping extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         globalTableTree = new javax.swing.JTree();
         jToolBar1 = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
+        newColumnButton = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jToolBar2 = new javax.swing.JToolBar();
         saveToolButton = new javax.swing.JButton();
@@ -94,52 +134,22 @@ public class Mapping extends javax.swing.JFrame {
 
         globalTableTree.setFont(new java.awt.Font("Calibri", 0, 11)); // NOI18N
         globalTableTree.setForeground(new java.awt.Color(102, 102, 102));
-        javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Table");
-        javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("globalColumn 1");
-        javax.swing.tree.DefaultMutableTreeNode treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("blue");
-        javax.swing.tree.DefaultMutableTreeNode treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("one");
-        treeNode3.add(treeNode4);
-        treeNode4 = new javax.swing.tree.DefaultMutableTreeNode("two");
-        treeNode3.add(treeNode4);
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("violet");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("red");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("yellow");
-        treeNode2.add(treeNode3);
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("globalColumn 2");
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("basketball");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("soccer");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("football");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("hockey");
-        treeNode2.add(treeNode3);
-        treeNode1.add(treeNode2);
-        treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("globalColumn 3");
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("hot dogs");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("pizza");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("ravioli");
-        treeNode2.add(treeNode3);
-        treeNode3 = new javax.swing.tree.DefaultMutableTreeNode("bananas");
-        treeNode2.add(treeNode3);
-        treeNode1.add(treeNode2);
-        globalTableTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        globalTableTree.setModel(globalTree);
         jScrollPane1.setViewportView(globalTableTree);
 
         jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\blank01.png")); // NOI18N
-        jButton1.setToolTipText("new column");
-        jToolBar1.add(jButton1);
+        newColumnButton.setBackground(new java.awt.Color(255, 255, 255));
+        newColumnButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\blank01.png")); // NOI18N
+        newColumnButton.setToolTipText("new column");
+        newColumnButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newColumnButtonActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(newColumnButton);
 
         jButton2.setBackground(new java.awt.Color(255, 255, 255));
         jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\blank01.png")); // NOI18N
@@ -238,6 +248,11 @@ public class Mapping extends javax.swing.JFrame {
         jButton6.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
         jButton6.setForeground(new java.awt.Color(51, 51, 51));
         jButton6.setText("Add Selected");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -514,10 +529,15 @@ public class Mapping extends javax.swing.JFrame {
 
     private void fileItemNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileItemNewActionPerformed
         // TODO add your handling code here:
+          //IFD = new newProject();
+        createProject frame = new createProject();
+        frame.setVisible(true);
     }//GEN-LAST:event_fileItemNewActionPerformed
 
     private void fileItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileItemExitActionPerformed
         // TODO add your handling code here:
+        //Note: add in a "Are you sure you want to exit?" warning before exiting.
+        dispose();
     }//GEN-LAST:event_fileItemExitActionPerformed
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
@@ -536,36 +556,29 @@ public class Mapping extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRadioButton5ActionPerformed
 
+    //"Add to Global Schema" button. When pressed it will add a child node to the 
+    //selected node on the tree.
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        
+     
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    //Pop up dialog prompt, then adds new node to tree.
+    private void newColumnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newColumnButtonActionPerformed
+        
+        String input = JOptionPane.showInputDialog(null, "New Column Name: ",
+					"Fraction Operations", JOptionPane.PLAIN_MESSAGE);    
+        DefaultMutableTreeNode child = new DefaultMutableTreeNode(input);
+        parent.add(child);
+        
+        globalTree.reload();
+    }//GEN-LAST:event_newColumnButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Mapping.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Mapping.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Mapping.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Mapping.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
         /*
          * Create and display the form
@@ -591,7 +604,6 @@ public class Mapping extends javax.swing.JFrame {
     private javax.swing.JPanel globalSchemaPanel;
     private javax.swing.JTree globalTableTree;
     private javax.swing.JMenu helpMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -627,6 +639,7 @@ public class Mapping extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JToolBar jToolBar2;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JButton newColumnButton;
     private javax.swing.JButton saveToolButton;
     private javax.swing.JLabel statusLabel;
     private javax.swing.JPanel statusPanel;
