@@ -19,7 +19,8 @@ public class Mapping extends javax.swing.JFrame {
     private LinkedList<javax.swing.JLabel> userSources = new LinkedList<javax.swing.JLabel>();
     private int totalSources;
     private DefaultTreeModel globalTree;
-    DefaultMutableTreeNode parent;
+    private String treeName;
+    private DefaultMutableTreeNode parent;
     
     /**
      * Creates new form Mapping
@@ -31,6 +32,7 @@ public class Mapping extends javax.swing.JFrame {
         initComponents();
         
         totalSources = len;
+        treeName = new String(titl);
         //Copy linkedlist passed to constructor
         for(int i = 0; i < totalSources; i++)
         { userSources.add( lst.get(i) ); }
@@ -39,7 +41,7 @@ public class Mapping extends javax.swing.JFrame {
         setTitle( "PLATFORM - " + name);
         
         //Begin the construction of the tree.
-        parent = new DefaultMutableTreeNode(titl);
+        parent = new DefaultMutableTreeNode(treeName);
         globalTree = new DefaultTreeModel(parent);
         
         //Tabs for the sources of Local Schema
@@ -53,6 +55,7 @@ public class Mapping extends javax.swing.JFrame {
     private Mapping() {
         initComponents();
         
+        treeName = new String("Table");
         DefaultMutableTreeNode parent = new DefaultMutableTreeNode("Table");
         globalTree = new DefaultTreeModel(parent);
     }
