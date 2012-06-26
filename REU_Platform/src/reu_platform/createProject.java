@@ -44,11 +44,12 @@ public class createProject extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         sourceTxtField = new javax.swing.JTextField();
         sourceAddButton = new javax.swing.JButton();
-        sourcesPanel = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
+        sourceListScrollPane = new javax.swing.JScrollPane();
+        sourcesPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,8 +76,6 @@ public class createProject extends javax.swing.JFrame {
             }
         });
 
-        sourcesPanel.setLayout(new java.awt.GridLayout(0, 2));
-
         jButton1.setText("Help");
 
         jButton2.setText("Cancel");
@@ -92,6 +91,9 @@ public class createProject extends javax.swing.JFrame {
                 jButton3ActionPerformed(evt);
             }
         });
+
+        sourcesPanel.setLayout(new java.awt.GridLayout(0, 2));
+        sourceListScrollPane.setViewportView(sourcesPanel);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -113,22 +115,22 @@ public class createProject extends javax.swing.JFrame {
                                 .addComponent(projectNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
-                            .addContainerGap()
+                            .addGap(10, 10, 10)
                             .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(sourcesPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(mainPanelLayout.createSequentialGroup()
-                                    .addGap(10, 10, 10)
                                     .addComponent(jLabel4)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(sourceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(sourceAddButton))))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                                    .addComponent(sourceAddButton))
+                                .addComponent(sourceListScrollPane))
+                            .addGap(6, 6, 6))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
                             .addGap(20, 20, 20)
                             .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel3)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton3)
@@ -161,9 +163,9 @@ public class createProject extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(sourceAddButton)
                     .addComponent(sourceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(sourcesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(sourceListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -195,6 +197,7 @@ public class createProject extends javax.swing.JFrame {
         userSources.add( new javax.swing.JLabel( "http://" + sourceTxtField.getText()) );
         sourceButtons.add(new javax.swing.JButton("x"));
         sourceButtons.getLast().setPreferredSize(new Dimension(41, 23)); 
+        sourceTxtField.setText("");
         
         sourcesPanel.add(userSources.getLast());
         sourcesPanel.add(sourceButtons.getLast());
@@ -271,6 +274,7 @@ public class createProject extends javax.swing.JFrame {
     private javax.swing.JPanel mainPanel;
     private javax.swing.JTextField projectNameTxtField;
     private javax.swing.JButton sourceAddButton;
+    private javax.swing.JScrollPane sourceListScrollPane;
     private javax.swing.JTextField sourceTxtField;
     private javax.swing.JPanel sourcesPanel;
     private javax.swing.JTextField tableNameTxtField;
