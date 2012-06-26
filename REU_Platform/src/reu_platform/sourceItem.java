@@ -19,6 +19,7 @@ public class sourceItem {
     private String sourceName;//Gathered from source
     private String sourceURL;//Entered by user
     private LinkedList<JCheckBox> localSchemaCheckBoxes = new LinkedList<JCheckBox>();
+    public javax.swing.JScrollPane checkBoxScrollPane = new javax.swing.JScrollPane();
     public JLabel localSchemaLabel;
     public JPanel checkBoxPanel = new JPanel(new GridLayout(0,1));
     public JButton addCheckButton;
@@ -41,6 +42,7 @@ public class sourceItem {
         setSourceName(name);
         setSourceURL(url);
         checkBoxPanel.setBackground(new java.awt.Color(255, 255, 255));
+        checkBoxScrollPane.setViewportView(checkBoxPanel);
         
         for(int i = 0; i <  10; i++)
         { addCheckBox( "CHECK BOX #" + (i+1) ); }
