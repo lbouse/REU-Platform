@@ -16,7 +16,8 @@ public class createProject extends javax.swing.JFrame {
         //Declaring some public variables.
     private LinkedList<javax.swing.JLabel> userSources = new LinkedList<javax.swing.JLabel>();
     private LinkedList<javax.swing.JButton> sourceButtons = new LinkedList<javax.swing.JButton>();
-    
+    private LinkedList<sourceNode> sourceList = new LinkedList<sourceNode>();
+    private int cnt = 0;
 
     /**
      * Creates new form createProject
@@ -193,7 +194,8 @@ public class createProject extends javax.swing.JFrame {
     }//GEN-LAST:event_sourceTxtFieldActionPerformed
 
     private void sourceAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sourceAddButtonActionPerformed
-        // TODO add your handling code here:
+        sourceList.add(new sourceNode(sourceTxtField.getText(), cnt) );      
+        cnt++;
         userSources.add( new javax.swing.JLabel( "http://" + sourceTxtField.getText()) );
         sourceButtons.add(new javax.swing.JButton("x"));
         sourceButtons.getLast().setPreferredSize(new Dimension(41, 23)); 
@@ -213,8 +215,9 @@ public class createProject extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         //Information to pass: userSources, number of sources, name, table
-        Mapping frame = new Mapping( projectNameTxtField.getText(), tableNameTxtField.getText(),
-                userSources, userSources.size());
+        //Mapping frame = new Mapping( projectNameTxtField.getText(), tableNameTxtField.getText(),
+        //        userSources, userSources.size());
+        SchemaMapping frame = new SchemaMapping( sourceList );
         frame.setVisible(true);
         
         dispose();

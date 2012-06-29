@@ -49,9 +49,9 @@ public class Mapping extends javax.swing.JFrame {
         
         //Begin the construction of the tree.
         parent = new DefaultMutableTreeNode(treeName);
-        DefaultMutableTreeNode category = new DefaultMutableTreeNode(
-                "Books for Java Programmers");
-        parent.add(category);
+        //DefaultMutableTreeNode category = new DefaultMutableTreeNode(
+         //       "Books for Java Programmers");
+        //parent.add(category);
         globalTree = new DefaultTreeModel(parent);
         
         initComponents();
@@ -64,8 +64,8 @@ public class Mapping extends javax.swing.JFrame {
     private Mapping() {        
         treeName = new String("Table");
         parent = new DefaultMutableTreeNode(treeName);
-        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Books for Java Programmers");
-        parent.add(category);
+        //DefaultMutableTreeNode category = new DefaultMutableTreeNode("Books for Java Programmers");
+        //parent.add(category);
         globalTree = new DefaultTreeModel(parent);
         
         initComponents();
@@ -274,10 +274,20 @@ public class Mapping extends javax.swing.JFrame {
 
         fileItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         fileItemOpen.setText("Open Project");
+        fileItemOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileItemOpenActionPerformed(evt);
+            }
+        });
         fileMenu.add(fileItemOpen);
 
         fileItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         fileItemSave.setText("Save");
+        fileItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileItemSaveActionPerformed(evt);
+            }
+        });
         fileMenu.add(fileItemSave);
 
         fileItemExit.setText("Exit");
@@ -370,8 +380,6 @@ public class Mapping extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void fileItemNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileItemNewActionPerformed
-        // TODO add your handling code here:
-          //IFD = new newProject();
         createProject frame = new createProject();
         frame.setVisible(true);
     }//GEN-LAST:event_fileItemNewActionPerformed
@@ -414,6 +422,16 @@ public class Mapping extends javax.swing.JFrame {
         sourcesTabPane.remove(sourcesTabPane.getSelectedIndex());
         //Note: add something to remove tab from LinkedList
     }//GEN-LAST:event_removeSrcMenuItemActionPerformed
+
+    private void fileItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileItemOpenActionPerformed
+        openProject oframe = new openProject();
+        oframe.setVisible(true);
+    }//GEN-LAST:event_fileItemOpenActionPerformed
+
+    private void fileItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileItemSaveActionPerformed
+        saveProject sframe = new saveProject();
+        sframe.setVisible(true);
+    }//GEN-LAST:event_fileItemSaveActionPerformed
 
     private void addCheckButtonActionPerformed(java.awt.event.ActionEvent evt) {    
         //Make a linked list of all the check boxes in the selected tab.
