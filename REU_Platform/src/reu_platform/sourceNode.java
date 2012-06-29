@@ -32,9 +32,10 @@ public class sourceNode {
     /*Public get&set methods*/
     public void setID(int i){ sourceID = i; }
     public void setName(String n){ sourceName = new String(n); }
-    public String getName(){ return sourceName; }
     public void setType(String n){ sourceType = new String(n); }
     public void setLabel(){ sourceLabel = new javax.swing.JLabel(sourceName); }
+    
+    public String getName(){ return sourceName; }
     public javax.swing.JLabel getLabel(){ return sourceLabel; }
     
     //-------------------------------------------------------------------
@@ -46,7 +47,6 @@ public class sourceNode {
         setName(name);
         setLabel();
         
-        
         //Set up the panel
         sourcePanel = new javax.swing.JPanel(new java.awt.GridLayout(0,1) );
         sourceLabel.setFont(new java.awt.Font("Century Gothic", 0, 18));
@@ -54,6 +54,7 @@ public class sourceNode {
         sourcePanel.add(sourceLabel);//Header
         //Add in seperator                                      <<<<<<<<<<<<<   <<<<<<<<<<<
         tableList.add( new javax.swing.JLabel(sourceName) );
+        populateSchemaList();
     }
     
     public sourceNode()
@@ -62,14 +63,13 @@ public class sourceNode {
         setName("Source");
         setLabel();
         
-        
         //Set up the panel
         sourcePanel = new javax.swing.JPanel(new java.awt.GridLayout(0,1) );
         sourceLabel.setFont(new java.awt.Font("Century Gothic", 0, 18));
         sourceLabel.setForeground(new java.awt.Color(102, 102, 102));
         sourcePanel.add(sourceLabel);
         //Add in seperator                                      <<<<<<<<<<<<<   <<<<<<<<<<<
-        tableList.add( new javax.swing.JLabel(sourceName) );
+        //tableList.add( new javax.swing.JLabel(sourceName) );
     }
     
     //-------------------------------------------------------------------

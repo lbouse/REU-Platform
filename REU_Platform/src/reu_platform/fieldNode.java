@@ -32,6 +32,8 @@ public class fieldNode {
     public void setSource(int x){ fieldSource = x; }
     public void setParent(int x){ fieldParent = x; }
     public void setPoint(Point xy){ lineStartPoint = new Point(xy); }
+    public void setLabel(){ fieldLabel = new javax.swing.JLabel(fieldTitle); }
+    
     public Point getLinePoint(){ return lineStartPoint; }
     
     //-------------------------------------------------------------------
@@ -41,6 +43,7 @@ public class fieldNode {
     {
         setTitle(title);
         setSource(parentID);
+        setLabel();
         
         //Make method to get point for drawing line
         //setPoint(coord);

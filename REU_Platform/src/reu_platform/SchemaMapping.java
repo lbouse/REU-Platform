@@ -1,6 +1,7 @@
 package reu_platform;
 
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 
 /*
  * To change this template, choose Tools | Templates
@@ -32,21 +33,22 @@ public class SchemaMapping extends javax.swing.JFrame {
     }
     
     //Filled constructor.
-    public SchemaMapping( LinkedList<sourceNode> lst){
+    public SchemaMapping( LinkedList<javax.swing.JLabel> lst ){
         initComponents();
-        
+        matchingPanel.setLayout( new java.awt.GridLayout(1,0) );
+                
         //for(int i = 0; i < lst.size(); i++)
         //{ sourcePanels.add( lst.get(i) ); }
-        
-        for(int i = 0; i < sourcePanels.size(); i++)
-        { matchingPanel.add(lst.get(i).sourcePanel); }
-        
-        lst.getFirst().sourcePanel.add(new javax.swing.JLabel("EXAMPLE"));
-        matchingPanel.add( new javax.swing.JLabel("BOB") );
-        matchingPanel.setLayout(new java.awt.BorderLayout());
+        //JOptionPane.showMessageDialog( null, "size: " + sourcePanels.size());
+
+        for(int i = 0; i < lst.size(); i++)
+        {
+            sourcePanels.add( new sourceNode(lst.get(i).getText(), i) );
+            matchingPanel.add( sourcePanels.getLast().sourcePanel );
+        }
+
+      
         matchingPanel.revalidate();
-        mainPanel.setLayout(new java.awt.BorderLayout());
-        mainPanel.revalidate();
     }
 
     /**
@@ -59,29 +61,15 @@ public class SchemaMapping extends javax.swing.JFrame {
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
-        optionPanel = new javax.swing.JPanel();
         matchingScrollPanel = new javax.swing.JScrollPane();
         matchingPanel = new javax.swing.JPanel();
+        optionPanel = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SCHEMA MATCHING");
-
-        optionPanel.setBackground(new java.awt.Color(255, 255, 255));
-        optionPanel.setForeground(new java.awt.Color(51, 51, 51));
-
-        javax.swing.GroupLayout optionPanelLayout = new javax.swing.GroupLayout(optionPanel);
-        optionPanel.setLayout(optionPanelLayout);
-        optionPanelLayout.setHorizontalGroup(
-            optionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        optionPanelLayout.setVerticalGroup(
-            optionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 73, Short.MAX_VALUE)
-        );
 
         matchingScrollPanel.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -99,6 +87,20 @@ public class SchemaMapping extends javax.swing.JFrame {
         );
 
         matchingScrollPanel.setViewportView(matchingPanel);
+
+        optionPanel.setBackground(new java.awt.Color(255, 255, 255));
+        optionPanel.setForeground(new java.awt.Color(51, 51, 51));
+
+        javax.swing.GroupLayout optionPanelLayout = new javax.swing.GroupLayout(optionPanel);
+        optionPanel.setLayout(optionPanelLayout);
+        optionPanelLayout.setHorizontalGroup(
+            optionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        optionPanelLayout.setVerticalGroup(
+            optionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 73, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);

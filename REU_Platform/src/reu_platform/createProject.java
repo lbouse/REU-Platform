@@ -217,7 +217,7 @@ public class createProject extends javax.swing.JFrame {
         //Information to pass: userSources, number of sources, name, table
         //Mapping frame = new Mapping( projectNameTxtField.getText(), tableNameTxtField.getText(),
         //        userSources, userSources.size());
-        SchemaMapping frame = new SchemaMapping( sourceList );
+        SchemaMapping frame = new SchemaMapping( userSources );
         frame.setVisible(true);
         
         dispose();
