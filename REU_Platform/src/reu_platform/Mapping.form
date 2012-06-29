@@ -305,9 +305,6 @@
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\blank01.png"/>
-                    </Property>
                     <Property name="toolTipText" type="java.lang.String" value="new column"/>
                   </Properties>
                   <Events>
@@ -318,9 +315,6 @@
                   <Properties>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
-                    </Property>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\blank01.png"/>
                     </Property>
                     <Property name="toolTipText" type="java.lang.String" value="delete column"/>
                     <Property name="focusable" type="boolean" value="false"/>
@@ -358,9 +352,6 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="saveToolButton">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\blank01.png"/>
-                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Save"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -369,9 +360,6 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButton4">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\blank01.png"/>
-                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="New Project"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -380,9 +368,6 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButton5">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\save.png"/>
-                </Property>
                 <Property name="toolTipText" type="java.lang.String" value="Open Project"/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="0"/>

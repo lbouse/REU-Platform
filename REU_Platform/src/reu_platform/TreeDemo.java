@@ -106,7 +106,7 @@ public class TreeDemo extends javax.swing.JInternalFrame {
         TreePath path = evt.getNewLeadSelectionPath();
         System.out.println(""+path.getLastPathComponent());
         
-        AdminTools.createFrame(); 
+//        AdminTools.createFrame(); 
     }//GEN-LAST:event_jTree1ValueChanged
 
     private void jTree1VetoableChange(java.beans.PropertyChangeEvent evt) throws java.beans.PropertyVetoException {//GEN-FIRST:event_jTree1VetoableChange
