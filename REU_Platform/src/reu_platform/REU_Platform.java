@@ -29,10 +29,13 @@ public class REU_Platform {
         s.query("SELECT * FROM customers");
         s.executeQuery();
         s.loadTable();
+               
+        s.joinTwoTables("joinone", "jointwo");
         
         s.printTables();
         
-        
+//        s.insertColumnIntoTable("Employee11", "age", "integer");
+//        s.changeColumnName("Employee11", "age", "school", "varchar(10)");
                 
 //        //"CREATE TABLE Employee11(Emp_code integer, Emp_name varchar(10))"
 //        ArrayList fields = new ArrayList(){{add("Emp_code"); add("Emp_name");}};
@@ -48,7 +51,7 @@ public class REU_Platform {
 //        s.loadAllTablesFromServer();
 //        s.printTables();        
         
-//        new PlatformControlCenter();
+        new PlatformControlCenter();
 //        
 //        new ReadExcelGUI();
     }

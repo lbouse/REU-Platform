@@ -13,7 +13,7 @@ import javax.swing.*;
  *
  * @author josealvarado
  */
-public class TestingLists extends JPanel {
+public class TestingLists extends javax.swing.JPanel {
 
   private static final Insets EMPTY_INSETS = new Insets(0, 0, 0, 0);
 
@@ -209,18 +209,15 @@ public class TestingLists extends JPanel {
   }
 
   public static void main(String args[]) {
-    JFrame f = new JFrame("Dual List Box Tester");
+    JFrame f = new JFrame("Query Global Database");
     f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     TestingLists dual = new TestingLists();
     dual.addSourceElements(new String[] { "One", "Two", "Three" });
     dual.addSourceElements(new String[] { "Four", "Five", "Six" });
     dual.addSourceElements(new String[] { "Seven", "Eight", "Nine" });
     dual.addSourceElements(new String[] { "Ten", "Eleven", "Twelve" });
-    dual
-        .addSourceElements(new String[] { "Thirteen", "Fourteen",
-            "Fifteen" });
-    dual.addSourceElements(new String[] { "Sixteen", "Seventeen",
-        "Eighteen" });
+    dual.addSourceElements(new String[] { "Thirteen", "Fourteen","Fifteen" });
+    dual.addSourceElements(new String[] { "Sixteen", "Seventeen","Eighteen" });
     dual.addSourceElements(new String[] { "Nineteen", "Twenty", "Thirty" });
     f.getContentPane().add(dual, BorderLayout.CENTER);
     f.setSize(400, 300);
@@ -241,63 +238,5 @@ public class TestingLists extends JPanel {
       addSourceElements(selected);
       clearDestinationSelected();
     }
-  }
-}
-
-class SortedListModel extends AbstractListModel {
-
-  SortedSet model;
-
-  public SortedListModel() {
-    model = new TreeSet();
-  }
-
-  public int getSize() {
-    return model.size();
-  }
-
-  public Object getElementAt(int index) {
-    return model.toArray()[index];
-  }
-
-  public void add(Object element) {
-    if (model.add(element)) {
-      fireContentsChanged(this, 0, getSize());
-    }
-  }
-
-  public void addAll(Object elements[]) {
-    Collection c = Arrays.asList(elements);
-    model.addAll(c);
-    fireContentsChanged(this, 0, getSize());
-  }
-
-  public void clear() {
-    model.clear();
-    fireContentsChanged(this, 0, getSize());
-  }
-
-  public boolean contains(Object element) {
-    return model.contains(element);
-  }
-
-  public Object firstElement() {
-    return model.first();
-  }
-
-  public Iterator iterator() {
-    return model.iterator();
-  }
-
-  public Object lastElement() {
-    return model.last();
-  }
-
-  public boolean removeElement(Object element) {
-    boolean removed = model.remove(element);
-    if (removed) {
-      fireContentsChanged(this, 0, getSize());
-    }
-    return removed;
   }
 }

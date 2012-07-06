@@ -18,4 +18,13 @@ public class TableList extends ArrayList<QueryTable>{
             returnMe+= ""+table+"\n";
         return returnMe;
     }
+    
+    public QueryTable getTable(String tableName){
+        for(QueryTable table: this){
+            if(table.getName().equals(tableName)){
+                return table.copy();
+            }
+        }
+        return null;
+    }
 }
