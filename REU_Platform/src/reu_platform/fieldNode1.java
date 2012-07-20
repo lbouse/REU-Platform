@@ -11,7 +11,7 @@ import java.util.LinkedList;
  *
  * @author Bouse
  */
-public class fieldNode {
+public class fieldNode1 {
     //-------------------------------------------------------------------
     //                          DECLARATIONS
     //-------------------------------------------------------------------    
@@ -24,29 +24,39 @@ public class fieldNode {
     
     /*Public Variables*/
     public javax.swing.JLabel fieldLabel;
-    public LinkedList<fieldNode> fieldLinks = new LinkedList<fieldNode>();
+    public LinkedList<fieldNode1> fieldLinks = new LinkedList<fieldNode1>();
+    public boolean selected = false;
     
     /*Public get&set Methods*/
     public void setTitle(String x){ fieldTitle = new String(x); }
     public void setType(String x){ fieldType = new String(x); }
     public void setSource(int x){ fieldSource = x; }
     public void setParent(int x){ fieldParent = x; }
-    public void setPoint(Point xy){ lineStartPoint = new Point(xy); }
+    public void setPoint(){ lineStartPoint = new Point( fieldLabel.getX(), fieldLabel.getY() ); }
     public void setLabel(){ fieldLabel = new javax.swing.JLabel(fieldTitle); }
     
-    public Point getLinePoint(){ return lineStartPoint; }
+    public Point getPoint(){ return lineStartPoint; }
+    public String getTitle(){ return fieldTitle; }
     
     //-------------------------------------------------------------------
     //                          CONSTRUCTORS
     //-------------------------------------------------------------------       
-    public fieldNode(String title, int parentID)
+    public fieldNode1(String title, int parentID)
     {
         setTitle(title);
         setSource(parentID);
         setLabel();
         
+        
         //Make method to get point for drawing line
         //setPoint(coord);
+    }
+    
+    public fieldNode1()
+    {
+        setTitle("Empty");
+        setSource(0);
+        //setLabel();
     }
 
 }

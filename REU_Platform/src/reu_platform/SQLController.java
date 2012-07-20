@@ -39,11 +39,25 @@ public class SQLController {
     }
     
     /*
+     * Connects to localhost server setup up by XAMPP to the given database
+     * Added by Leana.
+     */
+    public void ConnectToSever(String db) throws SQLException{
+        con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/" + db, "root", "");
+    }    
+    
+    /*
      * Connects to host server given the portNumber, database, user, and password
      */
     public void ConnectToServer(String host, int portNumber, String database, String user, String password) throws SQLException{
         con = DriverManager.getConnection(
                 "jdbc:mysql://"+host+":"+portNumber+"/"+database, user, password);
+    }
+    
+    public void DisconnectFromServer(String db) throws SQLException{
+        DriverManager.getConnection(
+            "jdbc:mysql://localhost:3306/" + db, "root", "").close();
     }
     
     /*
