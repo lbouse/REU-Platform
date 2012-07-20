@@ -165,7 +165,7 @@ public class SQLController {
      * EX. st.executeUpdate("INSERT employee VALUES("+13+","+"'Aman'"+")
      * It took 
      */
-    public void insertIntoTable(String tablename, ArrayList values) throws SQLException{
+    public void insertRowIntoTable(String tablename, ArrayList values) throws SQLException{
         String str = "(";
         for(int i = 0; i < values.size(); i++){
             str += values.get(i)+",";
@@ -174,5 +174,17 @@ public class SQLController {
         str += ")";
         System.out.println(""+str);
         statement.executeUpdate("INSERT "+tablename+" VALUES"+str);
+    }
+    
+    public void insertColumnIntoTable(String tableName, String columnName, String columnType) throws SQLException{
+        statement.executeUpdate("ALTER TABLE "+tableName+" ADD "+columnName+" "+columnType);
+    }
+    
+    public void changeColumnName(String tableName, String oldColumnName, String newColumnName, String newColumnType) throws SQLException{
+        statement.executeUpdate("ALTER TABLE "+tableName+" CHANGE "+oldColumnName+" "+newColumnName+" "+newColumnType);
+    }
+    
+    public void joinTwoTables(String table1, String table2) throws SQLException{
+        allThree("SELECT * FROM "+table1+" NATURAL JOIN "+table2);
     }
 }

@@ -13,6 +13,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.TableModel;
 import jxl.*;
+
 /**
  *
  * @author josealvarado
@@ -24,7 +25,7 @@ public class ReadExcelGUI extends javax.swing.JFrame {
      */
     public ReadExcelGUI() {
         initComponents();
-        
+       
        
     }
 
