@@ -141,7 +141,6 @@ public class Mapping extends javax.swing.JFrame {
         jToolBar1.setRollover(true);
 
         newColumnButton.setBackground(new java.awt.Color(255, 255, 255));
-        newColumnButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\blank01.png")); // NOI18N
         newColumnButton.setToolTipText("new column");
         newColumnButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,7 +150,6 @@ public class Mapping extends javax.swing.JFrame {
         jToolBar1.add(newColumnButton);
 
         deleteColumnButton.setBackground(new java.awt.Color(255, 255, 255));
-        deleteColumnButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\blank01.png")); // NOI18N
         deleteColumnButton.setToolTipText("delete column");
         deleteColumnButton.setFocusable(false);
         deleteColumnButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -192,21 +190,18 @@ public class Mapping extends javax.swing.JFrame {
 
         jToolBar2.setRollover(true);
 
-        saveToolButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\blank01.png")); // NOI18N
         saveToolButton.setToolTipText("Save");
         saveToolButton.setFocusable(false);
         saveToolButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         saveToolButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(saveToolButton);
 
-        jButton4.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\blank01.png")); // NOI18N
         jButton4.setToolTipText("New Project");
         jButton4.setFocusable(false);
         jButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         jToolBar2.add(jButton4);
 
-        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\save.png")); // NOI18N
         jButton5.setToolTipText("Open Project");
         jButton5.setFocusable(false);
         jButton5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
