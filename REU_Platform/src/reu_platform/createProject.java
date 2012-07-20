@@ -1,28 +1,43 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * DO NOT USE THIS FILE!!
+ * This is an old version, kept for reference purpsoes ONLY!
+ * Delete this when program is complete.
  */
 package reu_platform;
 
     //Importing LinkedLists for keeping track of the sources user adds.
     import java.util.LinkedList;
     import java.awt.Dimension;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 /**
  *
  * @author Bouse
  */
 public class createProject extends javax.swing.JFrame {
-    
-        //Declaring some public variables.
+    //Declaring some public variables.
+    private static String optionA;
+    private static String optionB;
     private LinkedList<javax.swing.JLabel> userSources = new LinkedList<javax.swing.JLabel>();
     private LinkedList<javax.swing.JButton> sourceButtons = new LinkedList<javax.swing.JButton>();
-    
+    private LinkedList<sourceNode> sourceList = new LinkedList<sourceNode>();
+    private javax.swing.JList tempList = new javax.swing.JList();
+    public static javax.swing.DefaultListModel listModelA;
+    public static javax.swing.DefaultListModel listModelB;
+    private int cnt = 0;
 
     /**
      * Creates new form createProject
      */
     public createProject() {
-        initComponents();
+     initComponents();
+     
+     sourceALabel.setText(optionA);
+     sourceBLabel.setText(optionB);
     }
 
     /**
@@ -41,15 +56,18 @@ public class createProject extends javax.swing.JFrame {
         tableNameTxtField = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        sourceTxtField = new javax.swing.JTextField();
-        sourceAddButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        sourceListScrollPane = new javax.swing.JScrollPane();
-        sourcesPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tableBList = new javax.swing.JList();
+        jLabel5 = new javax.swing.JLabel();
+        sourceALabel = new javax.swing.JLabel();
+        sourceBLabel = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableAList = new javax.swing.JList();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -59,22 +77,7 @@ public class createProject extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel3.setText("Sources");
-
-        jLabel4.setText("http://");
-
-        sourceTxtField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sourceTxtFieldActionPerformed(evt);
-            }
-        });
-
-        sourceAddButton.setText("+");
-        sourceAddButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sourceAddButtonActionPerformed(evt);
-            }
-        });
+        jLabel3.setText("Tables");
 
         jButton1.setText("Help");
 
@@ -92,60 +95,79 @@ public class createProject extends javax.swing.JFrame {
             }
         });
 
-        sourcesPanel.setLayout(new java.awt.GridLayout(0, 2));
-        sourceListScrollPane.setViewportView(sourcesPanel);
+        tableBList.setModel(listModelB);
+        jScrollPane1.setViewportView(tableBList);
+
+        jLabel5.setText("alt+click to select more than one");
+
+        sourceALabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        sourceALabel.setForeground(new java.awt.Color(51, 51, 51));
+        sourceALabel.setText("Tables");
+
+        sourceBLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        sourceBLabel.setForeground(new java.awt.Color(51, 51, 51));
+        sourceBLabel.setText("Tables");
+
+        tableAList.setModel(listModelA);
+        jScrollPane3.setViewportView(tableAList);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(51, 51, 51));
+        jLabel4.setText("Create New Project");
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(sourceBLabel)
+                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                            .addComponent(jButton3)
+                            .addGap(10, 10, 10)
+                            .addComponent(jButton2)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton1)
+                            .addGap(6, 6, 6))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addContainerGap()))))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(mainPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tableNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tableNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(mainPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(projectNameTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(mainPanelLayout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(sourceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                                    .addComponent(sourceAddButton))
-                                .addComponent(sourceListScrollPane))
-                            .addGap(6, 6, 6))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, mainPanelLayout.createSequentialGroup()
-                            .addGap(20, 20, 20)
-                            .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(projectNameTxtField))))
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(18, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(10, 10, 10)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(6, 6, 6))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel5))
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sourceALabel)
+                            .addComponent(jLabel4)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(141, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(29, 29, 29)
+                        .addComponent(jLabel4)
+                        .addGap(7, 7, 7)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addContainerGap()
@@ -157,14 +179,17 @@ public class createProject extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(sourceAddButton)
-                    .addComponent(sourceTxtField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(sourceListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sourceBLabel)
+                    .addComponent(sourceALabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -188,22 +213,6 @@ public class createProject extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void sourceTxtFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sourceTxtFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_sourceTxtFieldActionPerformed
-
-    private void sourceAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sourceAddButtonActionPerformed
-        // TODO add your handling code here:
-        userSources.add( new javax.swing.JLabel( "http://" + sourceTxtField.getText()) );
-        sourceButtons.add(new javax.swing.JButton("x"));
-        sourceButtons.getLast().setPreferredSize(new Dimension(41, 23)); 
-        sourceTxtField.setText("");
-        
-        sourcesPanel.add(userSources.getLast());
-        sourcesPanel.add(sourceButtons.getLast());
-        sourcesPanel.revalidate();
-    }//GEN-LAST:event_sourceAddButtonActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         //Close the current frame.
@@ -213,9 +222,39 @@ public class createProject extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         //Information to pass: userSources, number of sources, name, table
-        Mapping frame = new Mapping( projectNameTxtField.getText(), tableNameTxtField.getText(),
-                userSources, userSources.size());
-        frame.setVisible(true);
+        //Mapping frame = new Mapping( projectNameTxtField.getText(), tableNameTxtField.getText(),
+        //        userSources, userSources.size());
+        
+        //SchemaMapping frame = new SchemaMapping( userSources );
+        
+        // Get the index of all the selected items
+        int[] selectedIx = tableAList.getSelectedIndices();
+        List<String> selectedTables = new ArrayList();
+        
+        int[] selectedIxB = tableBList.getSelectedIndices();
+        List<String> selectedTablesB = new ArrayList();
+
+        // Get all the selected items using the indices
+        for (int i=0; i<selectedIx.length; i++) {
+            Object sel = tableAList.getModel().getElementAt(selectedIx[i]);
+            selectedTables.add( sel.toString() );
+        }
+        
+        for (int i=0; i<selectedIxB.length; i++) {
+            Object sel = tableBList.getModel().getElementAt(selectedIxB[i]);
+            selectedTablesB.add( sel.toString() );
+        }
+        
+//        SchemaMapping frame = new SchemaMapping();
+//        try {
+//            frame = new SchemaMapping( optionA, selectedTables, optionB, selectedTablesB);
+//        } catch (ClassNotFoundException ex) {
+//            Logger.getLogger(createProject.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(createProject.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        
+//        frame.setVisible(true);
         
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -223,37 +262,33 @@ public class createProject extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /*
-         * Set the Nimbus look and feel
-         */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /*
-         * If Nimbus (introduced in Java SE 6) is not available, stay with the
-         * default look and feel. For details see
-         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(createProject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(createProject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(createProject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(createProject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /*
-         * Create and display the form
-         */
+    public static void main(String args[]) throws ClassNotFoundException, SQLException {
+        
+        optionA = JOptionPane.showInputDialog("Source A: ");
+        optionB = JOptionPane.showInputDialog("Source B: ");
+                
+        SQLController s = new SQLController();
+        s.LoadSQLPlugin();
+        s.ConnectToSever(optionA);
+        s.allThree("SELECT * FROM INFORMATION_SCHEMA.TABLES");
+        
+        listModelA = new javax.swing.DefaultListModel();
+        ArrayList tblNamesA = s.getTableNamesFromServer();
+        for(int i = 0; i < tblNamesA.size(); i++ )
+        { listModelA.addElement( tblNamesA.get(i) ); }
+        s.DisconnectFromServer(optionA);
+        
+        SQLController j = new SQLController();
+        j.LoadSQLPlugin();
+        j.ConnectToSever(optionB);
+        j.allThree("SELECT * FROM INFORMATION_SCHEMA.TABLES");
+        
+        listModelB = new javax.swing.DefaultListModel();
+        ArrayList tblNamesB = j.getTableNamesFromServer();
+        for(int i = 0; i < tblNamesB.size(); i++ )
+        { listModelB.addElement( tblNamesB.get(i) ); }
+        j.DisconnectFromServer(optionB);
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
@@ -269,14 +304,17 @@ public class createProject extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JTextField projectNameTxtField;
-    private javax.swing.JButton sourceAddButton;
-    private javax.swing.JScrollPane sourceListScrollPane;
-    private javax.swing.JTextField sourceTxtField;
-    private javax.swing.JPanel sourcesPanel;
+    private javax.swing.JLabel sourceALabel;
+    private javax.swing.JLabel sourceBLabel;
+    private javax.swing.JList tableAList;
+    private javax.swing.JList tableBList;
     private javax.swing.JTextField tableNameTxtField;
     // End of variables declaration//GEN-END:variables
 }
