@@ -1,13 +1,11 @@
 package Project;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,6 +16,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
 
 /*
  * To change this template, choose Tools | Templates
@@ -43,6 +44,12 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
     private String dbType; //Only used if srcType == Database
     private String dbAType;
     private String dbBType;
+    private String exlFileA;
+    private String exlFileB;
+    private JPanel exlPanelA;
+    private JPanel exlPanelB;
+    private LinkedList<fieldNode> exlFieldsA = new LinkedList<fieldNode>();
+    private LinkedList<fieldNode> exlFieldsB = new LinkedList<fieldNode>();
     
     //These checks are used for drawing a line from one selection to another
     private fieldNode[] selectedNodes = {new fieldNode(), new fieldNode()};
@@ -78,15 +85,17 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
             
             dbPanelA = new JPanel();        
             dbPanelA.setLayout(new BoxLayout(dbPanelA, BoxLayout.PAGE_AXIS));
-            JLabel temp = new JLabel(dbAFields[2]);
-            temp.setFont(new java.awt.Font("Century Gothic", 0, 22));
-            temp.setForeground(new java.awt.Color(102, 102, 102));
-            dbPanelA.add(temp);
+            JLabel tempA = new JLabel(dbAFields[2]);
+            tempA.setFont(new java.awt.Font("Century Gothic", 0, 22));
+            tempA.setForeground(new java.awt.Color(102, 102, 102));
+            dbPanelA.add(tempA);
 
             dbPanelB = new JPanel(new BoxLayout(dbPanelB, BoxLayout.PAGE_AXIS));
             dbPanelB.setLayout(new BoxLayout(dbPanelB, BoxLayout.PAGE_AXIS));
-            temp.setText(dbBFields[2]);
-            dbPanelB.add(temp);
+            JLabel tempB = new JLabel(dbAFields[2]);
+            tempB.setFont(new java.awt.Font("Century Gothic", 0, 22));
+            tempB.setForeground(new java.awt.Color(102, 102, 102));
+            dbPanelB.add(tempB);
         
             int i;
             for(i = 0; i < tblA.size(); i++)
@@ -121,36 +130,214 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
 
             matchingPanel.addMouseListener(this);            
         }
-        else{ JOptionPane.showMessageDialog(null, "ERROR! Invalid source type."); }
+        else{ JOptionPane.showMessageDialog(null, "ERROR! Invalid source type.\n"
+                + "Error source: SchemaMapping constructor for Databases"); }
+    }
+    
+    // SchemaMapping constructor for Excel
+    public SchemaMapping(String projName, String sourceType, String xlFileA, String xlFileB, String orientation,
+            boolean cellSchema)
+    {
+        initComponents();
+        srcType = new String(sourceType);
+
+        String srcAFields[];
+        String srcBFields[];
+            
+        if( srcType.equals(" Excel") )
+        {
+            exlFileA = new String(xlFileA);
+            exlFileB = new String(xlFileB);
+            
+            Sheet sheetA = getFile(exlFileA);
+            Sheet sheetB = getFile(exlFileB);
+            
+            int rowsACnt = sheetA.getRows();
+            int rowsBCnt = sheetB.getRows();
+            int colsACnt = sheetA.getColumns();
+            int colsBCnt = sheetB.getColumns();
+            
+            if( orientation.equals("horizontal") )
+            {
+                srcAFields = new String[colsACnt];
+                srcBFields = new String[colsBCnt];
+                
+                if(cellSchema)
+                {
+                    for(int i = 0; i < colsACnt; i++)
+                    { srcAFields[i] = new String( sheetA.getCell(i, 0).getContents() ); }
+                    
+                    for(int i = 0; i < colsBCnt; i++)
+                    { srcBFields[i] = new String( sheetB.getCell(i, 0).getContents() ); }
+                }
+                else
+                {
+                    for(int i = 0; i < colsACnt; i++)
+                    { srcAFields[i] = new String(getColumnName(i)); }
+
+                    for(int i = 0; i < colsBCnt; i++)
+                    { srcBFields[i] = new String(getColumnName(i)); }
+                }
+            }
+            else if( orientation.equals("vertical") )
+            {
+                srcAFields = new String[rowsACnt];
+                srcBFields = new String[rowsBCnt];
+                
+                if(cellSchema)
+                {
+                    for(int i = 0; i < rowsACnt; i++)
+                    { srcAFields[i] = new String( sheetA.getCell(0, i).getContents() ); }
+                    
+                    for(int i = 0; i < rowsBCnt; i++)
+                    { srcBFields[i] = new String( sheetB.getCell(0, i).getContents() ); }
+                }
+                else
+                {
+                    for(int i = 0; i < colsACnt; i++)
+                    { srcAFields[i] = String.valueOf(i); }
+
+                    for(int i = 0; i < colsBCnt; i++)
+                    { srcBFields[i] = String.valueOf(i); }
+                }
+            } 
+            else 
+            { 
+                srcAFields = new String[0];
+                srcBFields = new String[0];            
+                
+                JOptionPane.showMessageDialog(null, "ERROR! Invalid orientation\n"
+                    + "Error source: SchemaMapping constructor for Excel"); 
+            }
+            
+            //Load the schema into the window for matching now 
+            //matchingScrollPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+            matchingPanel.setLayout( new java.awt.GridLayout(1,0) );
+            
+            dbPanelA = new JPanel();        
+            dbPanelA.setLayout(new BoxLayout(dbPanelA, BoxLayout.PAGE_AXIS));
+//            JLabel tempA = new JLabel(exlFileA);
+//            tempA.setFont(new java.awt.Font("Century Gothic", 0, 22));
+//            tempA.setForeground(new java.awt.Color(102, 102, 102));
+//            dbPanelA.add(tempA);
+
+            dbPanelB = new JPanel(new BoxLayout(dbPanelB, BoxLayout.PAGE_AXIS));
+            dbPanelB.setLayout(new BoxLayout(dbPanelB, BoxLayout.PAGE_AXIS));
+//            JLabel tempB = new JLabel(exlFileB);
+//            tempA.setFont(new java.awt.Font("Century Gothic", 0, 22));
+//            tempA.setForeground(new java.awt.Color(102, 102, 102));
+//            dbPanelB.add(tempB);
+        
+            int i;
+            for(i = 0; i < srcAFields.length; i++)
+            {
+                exlFieldsA.add( new fieldNode(srcAFields[i], 1, i) );
+                exlFieldsA.getLast().setPreferredSize(new Dimension(dbPanelA.getSize().width - 10, 15));
+                exlFieldsA.getLast().setPoint();
+                exlFieldsA.getLast().addMouseListener(this);
+                exlFieldsA.getLast().setAlignmentX(Component.LEFT_ALIGNMENT);
+                dbPanelA.add( exlFieldsA.getLast() );
+            }    
+            
+            for(int j = 0; j < srcBFields.length; j++)
+            {
+                exlFieldsB.add( new fieldNode(srcBFields[j], 2, i) );
+                exlFieldsB.getLast().setPreferredSize(new Dimension(dbPanelB.getSize().width - 10, 15));
+                exlFieldsB.getLast().setPoint();
+                exlFieldsB.getLast().addMouseListener(this);
+                exlFieldsB.getLast().setAlignmentX(Component.LEFT_ALIGNMENT);
+                dbPanelB.add( exlFieldsB.getLast() );
+                i++;
+            }              
+            
+            matchingPanel.add(dbPanelA);
+            matchingPanel.add(dbPanelB);
+            matchingPanel.revalidate();
+
+            matchingScrollPanel.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener(){
+                public void adjustmentValueChanged(AdjustmentEvent e) { matchingPanel.repaint(); }
+            });
+
+            matchingPanel.addMouseListener(this);               
+        }
+        else{ JOptionPane.showMessageDialog(null, "ERROR! Invalid source type.\n"
+                + "Error source: SchemaMapping constructor for Excel");
+        }
     }
    
-    //---------------------------------------------------------------------------------------------------------
-    //                                      GENERAL METHODS
-    //---------------------------------------------------------------------------------------------------------
+
+/*******************************************************************************
+**                             METHODS: GENERAL                               **
+*******************************************************************************/ 
+         /** Copied from javax.swing.table.AbstractTableModel,
+         * to name columns using spreadsheet conventions:
+         *  A, B, C, . Z, AA, AB, etc.
+         */
+        public String getColumnName(int column) {
+            String result = "";
+            for (; column >= 0; column = column / 26 - 1) {
+                result = (char)((char)(column%26)+'A') + result;
+            }
+            return result;
+        }
+    
     
     public void mouseReleased(MouseEvent e)
     {
-        if( e.getSource().getClass() == sourcePanels.getLast().sourceFields.getLast().getClass() )
+        if( srcType.equals(" Database") )
         {
-            for(int i = 0; i < sourcePanels.size(); i++)
-            {   for(int j = 0; j < sourcePanels.get(i).sourceFields.size(); j++)
-                { 
-                    if( e.getSource() == sourcePanels.get(i).sourceFields.get(j))
+            if( e.getSource().getClass() == sourcePanels.getLast().sourceFields.getLast().getClass() )
+            {
+                for(int i = 0; i < sourcePanels.size(); i++)
+                {   for(int j = 0; j < sourcePanels.get(i).sourceFields.size(); j++)
                     { 
-                        selectLabel( sourcePanels.get(i).sourceFields.get(j), i );
+                        if( e.getSource() == sourcePanels.get(i).sourceFields.get(j))
+                        { selectLabel( sourcePanels.get(i).sourceFields.get(j), i ); }
+                    }
+                }
+            }
+            else
+            {
+                for(int i = 0; i < linkList.size(); i++)
+                {   
+                    if( linkList.get(i).isOnLine( e.getPoint() ) )
+                    { 
+                        selectMatch(linkList.get(i));
                     }
                 }
             }
         }
-        else
+        else if(srcType.equals(" Excel"))
         {
-            for(int i = 0; i < linkList.size(); i++)
-            {   
-                if( linkList.get(i).isOnLine( e.getPoint() ) )
-                { 
-                    selectMatch(linkList.get(i));
+            if( e.getSource().getClass() == exlFieldsA.getLast().getClass() )
+            {
+                boolean found = false;
+                
+                for(int i = 0; !found && i < exlFieldsA.size(); i++)
+                {
+                    if(e.getSource() == exlFieldsA.get(i))
+                    { selectLabel( exlFieldsA.get(i), i ); }
+                }
+                
+                if( !found )
+                {
+                    for(int i = 0; !found && i < exlFieldsB.size(); i++)
+                    {
+                        if(e.getSource() == exlFieldsB.get(i))
+                        { selectLabel( exlFieldsB.get(i), i ); }
+                    }
                 }
             }
+            else
+            {
+                for(int i = 0; i < linkList.size(); i++)
+                {   
+                    if( linkList.get(i).isOnLine( e.getPoint() ) )
+                    { 
+                        selectMatch(linkList.get(i));
+                    }
+                }
+            }            
         }
     }
     
@@ -161,47 +348,77 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         
         Graphics g;
         g = matchingPanel.getGraphics();
+        node.setSelectedStatus(true);
 
-            node.setSelectedStatus(true);
+        if(!selectedNodes[0].getSelectedStatus())
+        {   
+            selectedNodes[0] = node;
+            selectedNodes[0].setBackground( new Color(238, 221, 130) );
+            selectedNodes[0].setOpaque(true);
+            if(linkList.size() > 0){linkList.getLast().setSelected(false);}
+        }
+        //else if(!selectedNodes[1].getSelectedStatus())
+        else
+        {   
+            selectedNodes[1] = node;
+            selectedNodes[1].setBackground( new Color(238, 221, 130));
+            selectedNodes[1].setOpaque(true);
+        }
+
+        //If there are two nodes selected, draw a line between them
+        if(selectedNodes[0].getSelectedStatus() && selectedNodes[1].getSelectedStatus())
+        {
+            selectedNodes[0].setPoint();
+            selectedNodes[1].setPoint();
+
+            int x1 = 0, x2 = 0, y1 = 0, y2 = 0;
             
-            if(!selectedNodes[0].getSelectedStatus())
-            {   
-                selectedNodes[0] = node;
-                selectedNodes[0].setBackground( new Color(238, 221, 130) );
-                selectedNodes[0].setOpaque(true);
-                if(linkList.size() > 0){linkList.getLast().setSelected(false);}
-            }
-            //else if(!selectedNodes[1].getSelectedStatus())
-            else
-            {   
-                selectedNodes[1] = node;
-                selectedNodes[1].setBackground( new Color(238, 221, 130));
-                selectedNodes[1].setOpaque(true);
-            }
-            
-            //If there are two nodes selected, draw a line between them
-            if(selectedNodes[0].getSelectedStatus() && selectedNodes[1].getSelectedStatus())
+            if( srcType.equals(" Database") )
             {
-                selectedNodes[0].setPoint();
-                selectedNodes[1].setPoint();
-                
                 int src1 = selectedNodes[0].getFieldSource();
                 int src2 = selectedNodes[1].getFieldSource();
                 int src1X;
                 int src2X;
                 if( src1 > listA ){ src1X = dbPanelB.getX(); } else{ src1X = 50; }
                 if( src2 > listA ){ src2X = dbPanelB.getX(); } else{ src2X = 50; }
-                
-                int x1 = selectedNodes[0].getPoint().x + src1X;
-                int y1 = selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
-                int x2 = selectedNodes[1].getPoint().x + src2X;
-                int y2 = selectedNodes[1].getPoint().y + sourcePanels.get(src2).sourcePanel.getY();
-                
-                selectedNodes[0].setPoint(new Point(x1, y1));
-                selectedNodes[1].setPoint(new Point(x2, y2));
-                
-                addMatch();
-            }        
+
+                x1 = selectedNodes[0].getPoint().x + src1X;
+                x2 = selectedNodes[1].getPoint().x + src2X;
+                y1 =  selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
+                y2 =  selectedNodes[1].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();          
+            }
+            else if( srcType.equals(" Excel") )
+            {
+                int src1 = selectedNodes[0].getID();
+                int src2 = selectedNodes[1].getID();
+                int src1X;
+                int src2X;
+                if( src1 == 1 ){ src1X = dbPanelA.getX(); } else{ src1X = 50; }
+                if( src2 == 2 ){ src2X = dbPanelB.getX(); } else{ src2X = 50; }
+
+                x1 = selectedNodes[0].getPoint().x + src1X;
+                x2 = selectedNodes[1].getPoint().x + src2X;
+                y1 =  selectedNodes[0].getPoint().y;
+                y2 =  selectedNodes[1].getPoint().y;  
+            }
+
+            
+//            if( srcType.equals(" Database") )
+//            {
+//                y1 = selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
+//                y2 = selectedNodes[1].getPoint().y + sourcePanels.get(src2).sourcePanel.getY();
+//            }
+//            else if( srcType.equals(" Excel") )
+//            {
+//                y1 = selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
+//                y2 = selectedNodes[1].getPoint().y + sourcePanels.get(src2).sourcePanel.getY();
+//            }
+
+            selectedNodes[0].setPoint(new Point(x1, y1));
+            selectedNodes[1].setPoint(new Point(x2, y2));
+
+            addMatch();
+        }        
 
     }
     
@@ -422,6 +639,48 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
                
     }
     
+       //------------------------------
+   // The following methods were used from ReadExcelGUI.java
+   //------------------------------
+      private Sheet readExcelSheet (File file) {
+        // open excel file (workbook) for reading
+        Workbook wbk;
+        try {
+            wbk = Workbook.getWorkbook(file);
+        } catch (Exception ex) {
+            JOptionPane message = new JOptionPane(
+                    "Can't read excel file " + file.getPath(),
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        if (wbk.getNumberOfSheets() <= 0) {
+            JOptionPane message = new JOptionPane(
+                    "Excel file doesn't have any sheets.",
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        // return first sheet
+        return wbk.getSheet(0);
+    }   
+    
+    public Sheet getFile(String fileName)
+    {
+        File file = new File(fileName);
+        //Enable this later, for now we just want the filename. Don't load the data yet.
+        // loading long excel tables may be time consuming, so use wait cursor
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        
+        Sheet sheet = readExcelSheet(file);
+        if (sheet == null) 
+        { JOptionPane.showMessageDialog(null, "ERROR!\nExcel sheet is empty!"); }
+
+        setCursor(Cursor.getDefaultCursor());
+        return sheet;
+    }
+      
+/*******************************************************************************
+**                             METHODS: GENERATED                             **
+*******************************************************************************/ 
     private void addMatchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMatchMouseClicked
         if( selectedNodes[0].getSelectedStatus() && selectedNodes[1].getSelectedStatus() )
         {
@@ -486,6 +745,8 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         if( !deleted ){ JOptionPane.showMessageDialog(null, "No link selected!"); }
     }//GEN-LAST:event_removeMatchMouseClicked
 
+    
+    
     public void paint(Graphics g)     //note paint method
     {   
         super.paint(g);
@@ -570,4 +831,5 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
 //    @Override
     public void mouseExited(MouseEvent e) {
     }
-}
+      
+}/* End class SchemaMapping.java */
