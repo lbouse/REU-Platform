@@ -15,9 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.htmlparser.util.ParserException;
 
 public class Hello extends HttpServlet {
-    
+
     public static OnlineDatabases oD = new OnlineDatabases();
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParserException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
@@ -46,28 +46,44 @@ public class Hello extends HttpServlet {
             keys.put(HouseSearch.MAX_PRICE, maxPrice);
 
             System.out.println("");
-            
+
             //Testing 
             GlobalTestInfo gti = new GlobalTestInfo();
-//            GeneralSearch dhs = new GeneralSearch(gti.getDHSQuery(), gti.getDHSClassNames(), gti.getDHSParser());
-//            dhs.processMyNodes();
+
+//            String testing1 = request.getParameter("website");
+//            System.out.println("TESTING TESTING testing1 = " + testing1);
+//            String testing2 = request.getParameter("treeNodeNames");
+//            System.out.println("TESTING TESTING testing2 = " + testing2);
+//            String testing3 = request.getParameter("parser");
+//            System.out.println("TESTING TESTING testing3 = " + testing3);
+//            System.out.println("");
+//            gti.parseAllData(testing1, testing2, testing3);
+
+            GeneralSearch dhs = new GeneralSearch(gti.getDHSQuery(), gti.getDHSClassNames(), gti.getDHSParser());
+//            GeneralSearch dhs = new GeneralSearch(gti.getUrls(0), gti.getTrees(0), gti.getParsers(0));
+            dhs.processMyNodes();
 //            dhs.displayNodes();
+            dhs.parseNodes();
+//            dhs.printGlobalData();
             GeneralSearch hhs = new GeneralSearch(gti.getHHSQuery(), gti.getHHSClassNames(), gti.getHHSParser());
+//            GeneralSearch hhs = new GeneralSearch(gti.getUrls(1), gti.getTrees(1), gti.getParsers(1));
             hhs.processMyNodes();
 //            hhs.displayNodes();
             hhs.parseNodes();
-            hhs.printGlobalData();
+//            hhs.printGlobalData();
             GeneralSearch zhs = new GeneralSearch(gti.getZHSQuery(), gti.getZHSClassNames(), gti.getZHSParser());
+//            GeneralSearch zhs = new GeneralSearch(gti.getUrls(2), gti.getTrees(2), gti.getParsers(2));
             zhs.processMyNodes();
             zhs.parseNodes();
 //            zhs.displayNodes();
-            zhs.printGlobalData();
-            
-            oD.add(hhs.getOnlineDatabase());
+//            zhs.printGlobalData();
+
             oD.add(zhs.getOnlineDatabase());
+            oD.add(dhs.getOnlineDatabase());
+            oD.add(hhs.getOnlineDatabase());
             //  
-            
-            DirectHouseSearch directHouseSearch = new DirectHouseSearch();            
+
+            DirectHouseSearch directHouseSearch = new DirectHouseSearch();
             HomeHouseSearch realtorHouseSearch = new HomeHouseSearch();
             ZillowHouseSearch zillowHouseSearch = new ZillowHouseSearch();
 
@@ -81,7 +97,7 @@ public class Hello extends HttpServlet {
             List<HouseInfo> realtorHouses = realtorHouseSearch.getHouses();
 
             if (zillowHouses.size() > 0) {
-                System.out.println("Zillow Houses Search has "+zillowHouses.size()+" results");
+                System.out.println("Zillow Houses Search has " + zillowHouses.size() + " results");
                 for (int index = 0; index < zillowHouses.size(); index++) {
                     totalHouses.add(zillowHouses.get(index));
                 }
@@ -90,7 +106,7 @@ public class Hello extends HttpServlet {
             }
 
             if (directHouses.size() > 0) {
-                System.out.println("Direct Houses Search has "+directHouses.size()+" results");
+                System.out.println("Direct Houses Search has " + directHouses.size() + " results");
                 for (int index = 0; index < directHouses.size(); index++) {
                     totalHouses.add(directHouses.get(index));
                 }
@@ -99,7 +115,7 @@ public class Hello extends HttpServlet {
             }
 
             if (realtorHouses.size() > 0) {
-                System.out.println("Realtor Houses Search has "+realtorHouses.size()+" results");
+                System.out.println("Realtor Houses Search has " + realtorHouses.size() + " results");
                 for (int index = 0; index < realtorHouses.size(); index++) {
                     totalHouses.add(realtorHouses.get(index));
                 }
@@ -115,46 +131,55 @@ public class Hello extends HttpServlet {
 
             //This page generates the talbe
             response.setContentType("text/Html");
-            PrintWriter pw = response.getWriter();
-            pw.println("<HTML><HEAD><TITLE>Search Results</TITLE></HEAD><BODY>");
-            pw.println("<br>");
 
-            if (totalHouses.size() != 0) {
-                pw.print("<table border=1px>");
-                pw.print("<th>House Address</th>");
-                pw.print("<th>Price</th>");
-                pw.print("<th>Monthly Payment</th>");
-                pw.print("<th>Number of Beds and Baths</th>");
-                pw.print("<th>Square Feet</th>");
-                pw.print("<th>Description</th>");
-                pw.print("</tr>");
-                int i = 0;
-                for (int index = 0; index < totalHouses.size(); index++) {
-                    HouseInfo house = totalHouses.get(index);
-                    if ((i++) % 2 == 0) {
-                        pw.print("<tr BGCOLOR ='#fdf5e6'>");
-                    } else {
-                        pw.print("<tr BGCOLOR ='#c0c0c0'>");
-                    }
-
-                    pw.println("<td>" + house.getAddress() + "</td>");
-                    pw.println("<td>" + house.getPrice() + "</td>");
-                    pw.println("<td>" + house.getMonthlyPayment() + "</td>");
-                    pw.println("<td>" + house.getBedBath() + "</td>");
-                    pw.println("<td>" + house.getSquare() + "</td>");
-                    pw.println("<td>" + house.getDescription() + "</td>");
-                    pw.println("</tr>");
-                }
-                pw.print("</table>");
-
-                pw.println("</BODY></HTML>");
-                pw.close();
+            if (!oD.isEmpty()) {
+                gti.printWebsite(oD, response);
             } else {
-                pw.println("Your queries do not return any results");
-                pw.println("</BODY>");
-                pw.println("</HTML>");
+                PrintWriter pw = response.getWriter();
 
+                pw.println("<HTML><HEAD><TITLE>Search Results</TITLE></HEAD><BODY>");
+                pw.println("<br>");
+
+                if (!totalHouses.isEmpty()) {
+                    pw.print("<table border=1px>");
+                    pw.print("<th>House Address</th>");
+                    pw.print("<th>Price</th>");
+                    pw.print("<th>Monthly Payment</th>");
+                    pw.print("<th>Number of Beds and Baths</th>");
+                    pw.print("<th>Square Feet</th>");
+                    pw.print("<th>Description</th>");
+                    pw.print("</tr>");
+                    int i = 0;
+                    for (int index = 0; index < totalHouses.size(); index++) {
+                        HouseInfo house = totalHouses.get(index);
+                        if ((i++) % 2 == 0) {
+                            pw.print("<tr BGCOLOR ='#fdf5e6'>");
+                        } else {
+                            pw.print("<tr BGCOLOR ='#c0c0c0'>");
+                        }
+
+                        pw.println("<td>" + house.getAddress() + "</td>");
+                        pw.println("<td>" + house.getPrice() + "</td>");
+                        pw.println("<td>" + house.getMonthlyPayment() + "</td>");
+                        pw.println("<td>" + house.getBedBath() + "</td>");
+                        pw.println("<td>" + house.getSquare() + "</td>");
+                        pw.println("<td>" + house.getDescription() + "</td>");
+                        pw.println("</tr>");
+                    }
+                    pw.print("</table>");
+
+                    pw.println("</BODY></HTML>");
+                    pw.close();
+                } else {
+                    pw.println("Your queries do not return any results");
+                    pw.println("</BODY>");
+                    pw.println("</HTML>");
+
+                }
             }
+
+
+
         } finally {
             out.close();
         }

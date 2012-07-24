@@ -3,21 +3,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html">
     <h:head>
-        <title>iHouse</title>
+        <title>REUCorpus</title>
     </h:head>
-
+    
     <body background="images/background.jpg">
 
+        <script type ="text/javascript">
+            var stuff = new Array();
+            var urlData = "";
+            function addDatabase(){
+                //Enter URL address
+                //This is how you can save input from the user
+                urlData += "URL" + prompt("Enter Database:", "");
+                document.write("Hello " + urlData + "<br/>");
+                stuff[stuff.length] = urlData;
+            }
+        </script>
+        
         <form action="./Hello" name="Search" method="post">
+            <input type="button" value = "Add Database" onclick="addDatabase()"/>
             <p>&nbsp;</p>
             <table width="100%" border="0px" align="center" cellpadding="4" cellspacing="0">
                 <tr>
+                    <!--
                     <td><center><img src="images/HomeSweetHome.jpg" width="400px" height="70" alt="b" /></center></td>
+                    -->
+                    <td><center>Testing Application</center></td>
                 </tr>
             </table>
             <h4>
                 <table border="0px" cellspacing="5" cellpadding="20" width="500" align="center">
-                    <td width="450"><img src="images/HousePTS.jpg" width="250" height="250" alt="houses" /></td>
+                    <!--
+                    <td width="450"><img src="images/randomDog.jpg" width="250" height="250" alt="houses" /></td>
+                    -->
                     <td valign="top">
                         <ul></ul><ul></ul>
                         <table border="0" align="top">
@@ -80,7 +98,31 @@
                                     <input type="text" name="maxprice" size="15" />
                                 </td>
                             </tr>
-
+                            <tr align="left">
+                                <td>
+                                    <label><font color="#003399">WEBSITE:</font></label>
+                                </td>
+                                <td>
+                                    <input type="text" name="website" size="15" />
+                                </td>
+                            </tr>
+                            <tr align="left">
+                                <td>
+                                    <label><font color="#003399">TREE_NODE_NAMES:</font></label>
+                                </td>
+                                <td>
+                                    <input type="text" name="treeNodeNames" size="15" />
+                                </td>
+                            </tr>
+                            <tr align="left">
+                                <td>
+                                    <label><font color="#003399">PARSER</font></label>
+                                </td>
+                                <td>
+                                    <input type="text" name="parser" size="15" />
+                                </td>
+                            </tr>
+                            
                             <ul></ul>
 
                             <tr valign="top">
@@ -98,7 +140,7 @@
                 <table border="0" align="center" cellpadding="4" cellspacing="0">
                     <tr>
                         <label><font color="#2F4F4F">
-                                &copy; 2010 Copy Rights. Huy Tran - Yuzhe Wei - Salm Bassam
+                                &copy; 2012 Copy Rights. Jose Alvarado
                             </font></label>
                     </tr>
                 </table>               

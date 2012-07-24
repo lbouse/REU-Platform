@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author josealvarado
  */
-public class OnlineDatabases extends ArrayList{
+public class OnlineDatabases extends ArrayList<OnlineDatabase>{
     
     
     public OnlineDatabases(){

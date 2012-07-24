@@ -30,6 +30,8 @@ public class GeneralSearch {
     private ArrayList classNames = new ArrayList(), parseInfo = new ArrayList(), listOfData = new ArrayList();
     private OnlineDatabase onlineDatabase = new OnlineDatabase();
 
+    boolean debug = true;
+    
     public GeneralSearch(){
     }
     
@@ -37,7 +39,12 @@ public class GeneralSearch {
         this.finalQueryString = finalQueryString;
         this.classNames = classNames;
         this.parseInfo = parseInfo;
-        this.onlineDatabase.name = this.finalQueryString;
+        this.onlineDatabase.setName(finalQueryString);
+        if(debug){
+            System.out.println("finalQueryString  = " + finalQueryString);
+            System.out.println("classNames = " + toStringArrayList(classNames));
+            System.out.println("parseInfo = " + toStringArrayList(parseInfo));
+        }
     }
 
     public void processMyNodes(Node node) {
@@ -114,6 +121,7 @@ public class GeneralSearch {
     public void processMyNodes() throws ParserException {
         try {
             for(int i = 0; i <  classNames.size(); i++){
+                if(debug)   System.out.println("Processed " + classNames.get(i));
                 processClass(""+classNames.get(i));
             }
         } catch (ParserException e) {
@@ -122,7 +130,10 @@ public class GeneralSearch {
     }
     
     public void printGlobalData(){
-        System.out.println("Global Data Size " + onlineDatabase.size());
+        if(debug) {
+            System.out.println("Pringting Global Data");
+            System.out.println("Global Data Size " + onlineDatabase.size());
+        }
         for(int i = 0; i < onlineDatabase.size(); i++){
             System.out.println("Entry " + i);
             System.out.println(""+onlineDatabase.get(i));
@@ -130,6 +141,7 @@ public class GeneralSearch {
     }
     
     public void parseNodes(){
+        if(debug)   System.out.println("Parsing Nodes");
         for(int i = 0; i < listOfData.size(); i++){
             DataClass dataClass = (DataClass)listOfData.get(i);
             ArrayList parseInfo2 = getMatchingParseData(dataClass.getName());
@@ -140,52 +152,50 @@ public class GeneralSearch {
     
     public void applyParserOn(DataClass dataClass, ArrayList parseInfo2){
 //        System.out.println(" parseInfo size = " + parseInfo2.size());
-        if(parseInfo2.size()==1){                                               //one line of parsing data per dataClass
-            String[] params = ((String)(parseInfo2.get(0))).split(" ");                     //parseInfo list into seperate components
-//            System.out.println("parseInfo as array " + toStringArray(params));
-            if(params[0].equals("[")){                                          //[   ] - implies a simple line command
-                if(params.length==3){                                           //if this is true, a command looks like this [ $name ] - assign everything to one DataClass
-                    String nameOfNewData = params[1];
-                    nameOfNewData = nameOfNewData.substring(1);                 //gets rid of the $(money symbol) from the name
-                    if(!nameOfNewData.equals("irrelevant")){
-                        for(int i = 0; i < dataClass.size(); i++){
-                            if(i >= onlineDatabase.size()){                                //if a Source Data doesn't exists create it
-                                SourceData sD = new SourceData();
-                                sD.save(nameOfNewData, ""+dataClass.get(i));
-                                onlineDatabase.add(sD);
-                            }else{                                                  //if a Source Data does exists use it
-                                SourceData sD = (SourceData)(onlineDatabase.get(i));
-                                sD.save(nameOfNewData, ""+dataClass.get(i));
-                            }
-                        }
+//        if(parseInfo2.size()==1){                                                           //one line of parsing data per dataClass
+//            String[] params = ((String)(parseInfo2.get(0))).split(" ");                     //parseInfo list into seperate components
+////            System.out.println("parseInfo as array " + toStringArray(params));
+//            if(params[0].equals("[")){                                                      //[   ] - implies a simple line command
+//                for(int i = 0; i < dataClass.size(); i++){
+//                    String data = (String)(dataClass.get(i)); 
+//                    String[] pData = parseAgain(data, params);                              //data that needs to be saved
+//                    String[] variableNames = getVariableNames(params);
+//                    for(int j = 0; j < pData.length; j++){
+//                        if(i >= onlineDatabase.size()){                                     //if a Source Data doesn't exists create it
+//                            SourceData sD = new SourceData();
+//                            sD.save(variableNames[j], ""+pData[j]);
+//                            onlineDatabase.add(sD);
+//                        }else{                                                              //if a Source Data does exists use it
+//                            SourceData sD = (SourceData)(onlineDatabase.get(i));
+//                            sD.save(variableNames[j], ""+pData[j]);
+//                        }
+//                    }
+//
+//                }
+//            }
+//            else{                                                                           // advanced command
+//                        
+//            }
+//        }
+//        else{                                                                                //more than one line of code
+            for(int i = 0; i < dataClass.size(); i++){
+                String data = (String)(dataClass.get(i)); 
+                String[] params = ((String)(parseInfo2.get(i % parseInfo2.size()))).split(" ");                     //parseInfo list into seperate components
+                String[] pData = parseAgain(data, params);                              //data that needs to be saved
+                String[] variableNames = getVariableNames(params);
+                for(int j = 0; j < pData.length; j++){
+                    if(i / parseInfo2.size() >= onlineDatabase.size()){                                     //if a Source Data doesn't exists create it
+                        SourceData sD = new SourceData();
+                        sD.save(variableNames[j], ""+pData[j]);
+                        onlineDatabase.add(sD);
+                    }else{                                                              //if a Source Data does exists use it
+                        SourceData sD = (SourceData)(onlineDatabase.get(i / parseInfo2.size()));
+                        sD.save(variableNames[j], ""+pData[j]);
                     }
                 }
-                else{                                                           //simple code with more than one parameter
-                    for(int i = 0; i < dataClass.size(); i++){
-                        String data = (String)(dataClass.get(i)); 
-                        String[] pData = parseAgain(data, params);              //data that needs to be saved
-                        String[] variableNames = getVariableNames(params);
-                        for(int j = 0; j < pData.length; j++){
-                            if(i >= onlineDatabase.size()){                                //if a Source Data doesn't exists create it
-                                SourceData sD = new SourceData();
-                                sD.save(variableNames[j], ""+pData[j]);
-                                onlineDatabase.add(sD);
-                            }else{                                                  //if a Source Data does exists use it
-                                SourceData sD = (SourceData)(onlineDatabase.get(i));
-                                sD.save(variableNames[j], ""+pData[j]);
-                            }
-                        }
-                        
-                    }
-                }
+
             }
-            else{                                                               // advanced command
-                    
-            }
-        }
-        else{                                                                   //more than one line of code
-            
-        }
+//        }
         
     }
     
@@ -256,7 +266,16 @@ public class GeneralSearch {
         return returnMe;
     }
     
+    public String toStringArrayList(ArrayList list){
+        String returnMe = "";
+        for(int i = 0; i < list.size(); i++){
+            returnMe += list.get(i) + " ";
+        }
+        return returnMe.trim();
+    }
+    
     public void displayNodes(){
+        if(debug)   System.out.println("Displaying Nodes");
         for(int i = 0; i < listOfData.size(); i++){
             System.out.println(""+listOfData.get(i));
         }

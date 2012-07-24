@@ -10,9 +10,9 @@ import java.util.ArrayList;
  *
  * @author josealvarado
  */
-public class OnlineDatabase extends ArrayList{
+public class OnlineDatabase extends ArrayList<SourceData>{
     
-    public String name;
+    private String name;
     
     public OnlineDatabase(){
         
@@ -26,5 +26,11 @@ public class OnlineDatabase extends ArrayList{
         return ((SourceData)(this.get(0))).getKeys();
     }
     
+    public String getName(){
+        return name;
+    }
     
+    public void setName(String name){
+        this.name = name;
+    }
 }
