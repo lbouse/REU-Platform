@@ -7,6 +7,8 @@ package Project;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -53,6 +55,16 @@ public class createNewProject extends javax.swing.JFrame {
     Border border = LineBorder.createGrayLineBorder();
     
     private int stepNumber = 0;
+    private boolean cellSchema = false;
+    private String srcType;
+    private String srcAStr[];
+    private String srcBStr[];
+    private String projName;
+    private String sourceADBType;
+    private String sourceBDBType;
+    private String exlFileA;
+    private String exlFileB;
+    private String chosenOrientation;
     
     /**
      * Creates new form createProject
@@ -181,140 +193,93 @@ public class createNewProject extends javax.swing.JFrame {
         mainPanel.revalidate();
     }/* end buildStepOne */
     
-    public void buildStepTwo( final String projName, final String srcType ) throws ClassNotFoundException, SQLException
+    public void buildStepTwo( final String pName, final String srcType ) throws ClassNotFoundException, SQLException
     {
-        if( srcType.equals(" Database") )
-        {
-            mainPanel.add( Box.createRigidArea(new Dimension(0, 3)) );
-            headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            mainPanel.add(headerPanel); 
-            
-            final createNewProjectDB s = new createNewProjectDB(stepNumber);
-            s.dbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            mainPanel.add(s.dbPanel);
-            
-            nextBtn.addActionListener(new java.awt.event.ActionListener(){
-                public void actionPerformed(ActionEvent e) {
-                    String srcAStr[] = new String[s.fieldLength];
-                    String srcBStr[] = new String[s.fieldLength];
-                    if(s.checkAll()){
-                        for(int i = 0; i < s.sourceAFields.length; i++)
-                        { srcAStr[i] = new String(s.sourceAFields[i].getText()); }
-                        
-                        for(int i = 0; i < s.sourceBFields.length; i++)
-                        { srcBStr[i] = new String(s.sourceBFields[i].getText()); }
-                        
-                        try {
-                            mainPanel.removeAll();
-                            mainPanel.revalidate();
-                            mainPanel.repaint();
-                            stepNumber++;
-                            buildStepThree( projName, srcType, s.sourceADBType,
-                                s.sourceBDBType, srcAStr, srcBStr );
-                        } catch (ClassNotFoundException ex) {
-                            //Logger.getLogger(createNewProject.class.getName()).log(Level.SEVERE, null, ex);
-                            JOptionPane.showMessageDialog(null, "ERROR!\nClassNotFoundException");
-                        } catch (SQLException ex) {
-                            //Logger.getLogger(createNewProject.class.getName()).log(Level.SEVERE, null, ex);
-                            JOptionPane.showMessageDialog(null, "ERROR!\nSQLException Step Two");
-                        }
-                    }else{ JOptionPane.showMessageDialog(null, "ERROR!\nField left blank."); }
-                } 
-            });
-                    
-            createButtonPanel.revalidate();
-            createButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-            mainPanel.add(createButtonPanel);
-            mainPanel.revalidate();
-        }
-//        { buildStepTwoA(projName, destChoice); }
-//        else if( srcType.equals(" XML") )
-//        { buildStepTwoB(projName, destChoice, 1); }
-//        else if( srcType.equals(" Excel") )
-//        { buildStepTwoB(projName, destChoice, 2); }
-//        else if( srcType.equals(" Text") )
-//        { buildStepTwoB(projName, destChoice, 3); }
-//        else if( srcType.equals(" Website") )
-//        { buildStepTwoC(projName, destChoice); }
+        projName = pName;
         
+        if( srcType.equals(" Database") )
+        { buildStepTwoA(projName, srcType, stepNumber); }
+        else if( srcType.equals(" Excel") )
+        { buildStepTwoB(projName, srcType, stepNumber); }
         else{ JOptionPane.showMessageDialog(null, "Error in: buildStepTwo\n"
                 + "Invalid source type specified: " + "'" + srcType + "'"); }
     }/* end buildStepTwo */
     
     //Step two, source type "Database"
-    public void buildStepTwoA(String projName, String destChoice)
+    public void buildStepTwoA(final String projName, final String srcType, int stepNum) 
+            throws ClassNotFoundException, SQLException
     {
-//        buildHeaderPanel();
         mainPanel.add( Box.createRigidArea(new Dimension(0, 3)) );
         headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(headerPanel);        
-                 
-        if( destChoice == "Database" )
-        {
-            JPanel dbPanel = new JPanel();
-            dbPanel.setLayout( new BoxLayout(dbPanel, BoxLayout.X_AXIS) );
-            
-            JPanel innerPanelLeft = new JPanel();
-            innerPanelLeft.setMaximumSize(new Dimension(300, 400));
-            innerPanelLeft.setLayout( new BoxLayout(innerPanelLeft, BoxLayout.Y_AXIS) );
-            
-            JLabel leftTitle = new JLabel("Source: ");
-            leftTitle.setFont(new java.awt.Font("Century Gothic", 0, 18));
-            leftTitle.setForeground(new java.awt.Color(102, 102, 102));
-            leftTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-            innerPanelLeft.add(leftTitle);
-            
-            String[] dbStrings = { "Oracle", "mySQL", "SQL Server", "PostgreSQL" };
-            final JList dbList = new JList(dbStrings);
-            dbList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-            dbList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-            dbList.setVisibleRowCount(-1);
-            dbList.setFixedCellWidth(200);
-            dbList.setFixedCellHeight(30);
-            
-            dbList.addListSelectionListener(new ListSelectionListener(){
-               public void valueChanged(ListSelectionEvent e) {
-                   if(e.getValueIsAdjusting()) { return; }
-                   sourceDBType = new String(String.valueOf(dbList.getSelectedValue()));
-               }
-            });
-        
-            dbList.setAlignmentX(Component.LEFT_ALIGNMENT);
-            innerPanelLeft.add(dbList);
-            
-            innerPanelLeft.setAlignmentX(Component.LEFT_ALIGNMENT);
-            dbPanel.add(innerPanelLeft);
-            
-            JPanel innerPanelRight = new JPanel();
-            innerPanelRight.setMaximumSize(new Dimension(300, 400));
-            innerPanelRight.setMinimumSize(new Dimension(100, 100));
-            innerPanelRight.setLayout( new BoxLayout(innerPanelRight, BoxLayout.Y_AXIS) );
-            
-            JPanel destRows[] = new JPanel[5];
-            JLabel destLabels[] = new JLabel[5];
-            
-            //dbPanel.add( new JSeparator(SwingConstants.VERTICAL) );
-            buildDBConnectPanel("Destination", innerPanelRight, destFields, destRows, destLabels );
-            
-            //Add all the main panels to dbPanel
-            innerPanelRight.setAlignmentX(Component.LEFT_ALIGNMENT);
-            dbPanel.add(innerPanelRight);
-            mainPanel.add(dbPanel);
-        }
-        else if( destChoice == "File" )
-        {
-            
-        }
-        else{ JOptionPane.showMessageDialog(null, "Error in: buildStepTwoA\n"
-                + "Invalid destination choice specified."); }
-        
-//        buildButtonPanel();
+        mainPanel.add(headerPanel); 
+
+        final createNewProjectDB s = new createNewProjectDB(stepNum);
+        s.dbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(s.dbPanel);
+
+        nextBtn.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                srcAStr = new String[s.fieldLength];
+                srcBStr = new String[s.fieldLength];
+                if(s.checkAll()){
+                    for(int i = 0; i < s.sourceAFields.length; i++)
+                    { srcAStr[i] = new String(s.sourceAFields[i].getText()); }
+
+                    for(int i = 0; i < s.sourceBFields.length; i++)
+                    { srcBStr[i] = new String(s.sourceBFields[i].getText()); }
+
+                    sourceADBType = s.sourceADBType;
+                    sourceBDBType = s.sourceBDBType;
+
+                }else{ JOptionPane.showMessageDialog(null, "ERROR!\nField left blank."); }
+            } 
+        });
+
+        createButtonPanel.revalidate();
         createButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(createButtonPanel);
-        mainPanel.revalidate();
+        mainPanel.revalidate();        
     }/*end build StepTwoA*/
  
-    public void buildStepThree(String projName, String srcType, String sourceADBType, 
+    //Step two, source type "Excel"
+    public void buildStepTwoB(final String projName, final String srcType, final int stepNum) throws ClassNotFoundException, SQLException
+    {
+        mainPanel.add( Box.createRigidArea(new Dimension(0, 3)) );
+        headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(headerPanel); 
+
+        final createNewProjectExcel s = new createNewProjectExcel(stepNum);
+        s.dbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(s.dbPanel);
+        
+        nextBtn.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                /* Check to make sure user specified two files */
+                if( !s.fileA.getText().isEmpty() || !s.fileB.getText().isEmpty() ){
+                    exlFileA = new String(s.fileA.getText());
+                    exlFileB = new String(s.fileB.getText());
+
+                }else{ JOptionPane.showMessageDialog(null, "ERROR!\nField left blank."); }
+            } 
+        });
+        
+        createButtonPanel.revalidate();
+        createButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(createButtonPanel);
+        mainPanel.revalidate();             
+    }/* end buildStepTwoB */
+    
+    public void buildStepThree(String projName) throws ClassNotFoundException, SQLException
+    {
+        if( srcType.equals(" Database") )
+        { buildStepThreeA(projName, srcType, sourceADBType, sourceBDBType, srcAStr, srcBStr); }
+        else if( srcType.equals(" Excel") )
+        { buildStepThreeB(stepNumber, projName, srcType, exlFileA, exlFileB); }
+        else{ JOptionPane.showMessageDialog(null, "Error in: buildStepTwo\n"
+                + "Invalid source type specified: " + "'" + srcType + "'"); }
+    }
+    
+    public void buildStepThreeA(String projName, String srcType, String sourceADBType, 
            String sourceBDBType, String sourceAFields[], String sourceBFields[]) throws ClassNotFoundException, SQLException
     {
         if( srcType.equals(" Database") )
@@ -322,6 +287,7 @@ public class createNewProject extends javax.swing.JFrame {
             final createNewProjectDB j = new createNewProjectDB(stepNumber, sourceAFields,
                     sourceBFields, sourceADBType, sourceBDBType);
             
+            JOptionPane.showMessageDialog(null, "buildStepThreeA");
             //srcAFields: 0:Host; 1:Port; 2:Database; 3:Username; 4:Password
             SchemaMapping frame = new SchemaMapping(projName, srcType, sourceADBType,
                     sourceBDBType, j.tblNamesA, j.tblNamesB, j.srcAFields, j.srcBFields);
@@ -331,6 +297,7 @@ public class createNewProject extends javax.swing.JFrame {
         else{ JOptionPane.showMessageDialog(null, "Error in: buildStepThreeA\n"
                 + "Invalid destination choice specified."); }
     }
+
     
     //Next screen from buildStepTwoA: Database
     //Assumed that JList dbList and JTextField destFields[5] has content
@@ -397,13 +364,100 @@ public class createNewProject extends javax.swing.JFrame {
         mainPanel.revalidate();
     }/*end buildStepThreeA*/
     
-    public void buildStepThreeB()
+    public void buildStepThreeB(final int stepNum, final String projName, final String srcType, String fileA, String fileB) 
+            throws ClassNotFoundException, SQLException
     {
         mainPanel.add( Box.createRigidArea(new Dimension(0, 3)) );
         headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(headerPanel);        
         
+        final createNewProjectExcel s = new createNewProjectExcel(stepNum);
         
+        s.horLabel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if( !s.getOrientation().equals("horizontal") )
+                {
+                    s.setOrientation("horizontal");
+                    s.horLabel.setBorder( BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.LOWERED) );
+                    s.vertLabel.setBorder( BorderFactory.createEmptyBorder() );
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                s.horLabel.setBorder( BorderFactory.createLoweredBevelBorder() );
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if( s.getOrientation().equals("horizontal") )
+                { s.horLabel.setBorder( BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.LOWERED) ); }
+                else{ s.horLabel.setBorder( BorderFactory.createEmptyBorder() ); }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                s.horLabel.setBorder( BorderFactory.createRaisedBevelBorder() );
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // General Click
+            }
+        }); 
+        
+        s.vertLabel.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if( !s.getOrientation().equals("vertical") )
+                {
+                    s.setOrientation("vertical");
+                    s.vertLabel.setBorder( BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.LOWERED) );
+                    s.horLabel.setBorder( BorderFactory.createEmptyBorder() );
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {
+                s.vertLabel.setBorder( BorderFactory.createLoweredBevelBorder() );
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                if( s.getOrientation().equals("vertical") )
+                { s.vertLabel.setBorder( BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.LOWERED) ); }
+                else{ s.vertLabel.setBorder( BorderFactory.createEmptyBorder() ); }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                s.vertLabel.setBorder( BorderFactory.createRaisedBevelBorder() );
+            }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // General Click
+            }
+        });         
+        
+        s.dbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mainPanel.add(s.dbPanel);
+        
+        nextBtn.addActionListener(new java.awt.event.ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                /* Check to make sure user specified two files */
+                if( !s.getOrientation().isEmpty() ){
+                    chosenOrientation = new String(s.getOrientation());
+//                        mainPanel.removeAll();
+//                        mainPanel.revalidate();
+//                        mainPanel.repaint();
+//                        stepNumber++;
+//                    try {
+//                        buildStepThreeB( stepNumber, projName, srcType, s.fileA.getText(),
+//                            s.fileB.getText() );
+//                    } catch (ClassNotFoundException ex) {
+//                        Logger.getLogger(createNewProject.class.getName()).log(Level.SEVERE, null, ex);
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(createNewProject.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+                }else{ JOptionPane.showMessageDialog(null, "ERROR!\nField left blank."); }
+            } 
+        });
+        
+        createButtonPanel.revalidate();
         createButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(createButtonPanel);
         mainPanel.revalidate();
@@ -423,6 +477,23 @@ public class createNewProject extends javax.swing.JFrame {
     
     public void buildStepFour()
     {
+        if( srcType.equals(" Database") )
+        {
+            
+        }
+        else if( srcType.equals(" Excel") )
+        {
+//SchemaMapping(String projName, String sourceType, String xlFileA, String xlFileB, String orientation, boolean cellSchema)                    
+            //srcAFields: 0:Host; 1:Port; 2:Database; 3:Username; 4:Password
+            SchemaMapping frame = new SchemaMapping(projName, srcType, exlFileA, exlFileB, chosenOrientation, true);
+            frame.setVisible(true);
+            dispose();             
+        }
+        
+    }/* End public method buildStepFour */
+    
+    public void buildStepFourB()
+    {
         mainPanel.add( Box.createRigidArea(new Dimension(0, 3)) );
         headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(headerPanel);        
@@ -432,7 +503,7 @@ public class createNewProject extends javax.swing.JFrame {
         createButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(createButtonPanel);
         mainPanel.revalidate();
-    }
+    }/* End public method buildStepFour */    
     
 // User has submitted connection information and now the program will attempt to
 // connect to the given datbases and display all tables available for merging.
@@ -590,21 +661,22 @@ public class createNewProject extends javax.swing.JFrame {
                         mainPanel.repaint();
                         if( !checkRequired() )
                         {   stepNumber++; 
+                            srcType = String.valueOf(sourceJList.getSelectedValue());
                             buildStepTwo(projNameField.getText(), 
-                                String.valueOf(sourceJList.getSelectedValue()) );
+                                srcType );
                         }
                         break;
                 case 1: mainPanel.removeAll();
                         mainPanel.repaint();
-//                        buildStepThree();
                         stepNumber++;
+                        buildStepThree(projNameField.getText());
                         break;
                 case 2: mainPanel.removeAll();
                         mainPanel.repaint();
                         buildStepFour();
                         stepNumber++;
                         break;
-                default: JOptionPane.showMessageDialog(null, "Unknown Error!");
+                default: JOptionPane.showMessageDialog(null, "Unknown Error in optionBtnEvent step " + stepNumber);
                         break;
             } 
         }

@@ -11,6 +11,8 @@ package Project;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,7 +41,8 @@ public class createNewProjectExcel {
     private JButton cancelBtn = new JButton("Cancel");
     private JButton helpBtn = new JButton("Help");    
     private JPanel headerPanel = new JPanel();
-    private JPanel createButtonPanel = new JPanel();   
+    private JPanel createButtonPanel = new JPanel();  
+    public String chosenOrientation = new String(); 
     
     public static javax.swing.DefaultListModel listModelA = new javax.swing.DefaultListModel();
     public static javax.swing.DefaultListModel listModelB = new javax.swing.DefaultListModel();
@@ -48,7 +51,8 @@ public class createNewProjectExcel {
     //Public variables
     public JTextField fileA = new JTextField(20);
     public JTextField fileB = new JTextField(20);
-    
+    public JLabel horLabel;
+    public JLabel vertLabel;
     public JPanel dbPanel = new JPanel();  
     public javax.swing.JScrollPane scrollPaneA;
     public javax.swing.JScrollPane scrollPaneB;
@@ -56,12 +60,16 @@ public class createNewProjectExcel {
     public ArrayList tblNamesB = new ArrayList();    
     
     Border border = LineBorder.createGrayLineBorder();              //DELETE LATER&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+        
+/*******************************************************************************    
+**                             GET/SET METHODS                                **
+*******************************************************************************/ 
+    public String getOrientation(){ return chosenOrientation; }
+    public void setOrientation(String x){ chosenOrientation = new String(x); }
     
-//**********************************************************************************************************
-    
-    /***************************************************************************
-    **                             CONSTRUCTORS                               **
-    ***************************************************************************/
+/*******************************************************************************    
+**                             CONSTRUCTORS                                   **
+*******************************************************************************/ 
     
     public createNewProjectExcel(int stepNum) throws ClassNotFoundException, SQLException
     {
@@ -75,8 +83,11 @@ public class createNewProjectExcel {
                     break;
             case 1: buildStepTwo(); //Step "two", in the overall scheme of things
                     break;
+            case 2: buildStepThree();
+                    break;
             default: JOptionPane.showMessageDialog(null, "ERROR!\n"
-                    + "invalid stepNumber occured!");
+                    + "invalid stepNumber occured!\nsource: createNewProkectExcel construct #1");
+                    break;
         }
     }
     
@@ -93,22 +104,24 @@ public class createNewProjectExcel {
                     break;
             case 1: buildStepTwo();
                     break;
+            case 2: buildStepThree();
             default: JOptionPane.showMessageDialog(null, "ERROR!\n"
-                    + "invalid stepNumber occured!");
+                    + "invalid stepNumber occured!\nsource: createNewProkectExcel construct #2");
         }        
     }
     
-    /***************************************************************************
-    **                             METHODS: THE STEPS                         **
-    ***************************************************************************/
+/*******************************************************************************
+**                             METHODS: THE STEPS                             **
+*******************************************************************************/
     
-   //STEP TWO.
+/* STEP TWO */
     //User selects two excel files to open.
     public void buildStepTwo()
     {   
         JPanel rowA = new JPanel();
-        rowA.setLayout( new BoxLayout(dbPanel, BoxLayout.X_AXIS) );
+        rowA.setLayout( new BoxLayout(rowA, BoxLayout.X_AXIS) );
         
+        fileA.setMaximumSize( new Dimension(200, 20) );
         fileA.setAlignmentX(Component.LEFT_ALIGNMENT);
         rowA.add(fileA);
         rowA.add( Box.createRigidArea(new Dimension(15,0)) );
@@ -125,9 +138,12 @@ public class createNewProjectExcel {
         rowA.setAlignmentX(Component.LEFT_ALIGNMENT);
         dbPanel.add(rowA);
         
-        JPanel rowB = new JPanel();
-        rowA.setLayout( new BoxLayout(dbPanel, BoxLayout.X_AXIS) );
+        dbPanel.add( Box.createRigidArea(new Dimension(0, 20)) );
         
+        JPanel rowB = new JPanel();
+        rowB.setLayout( new BoxLayout(rowB, BoxLayout.X_AXIS) );
+        
+        fileB.setMaximumSize( new Dimension(200, 20) );
         fileB.setAlignmentX(Component.LEFT_ALIGNMENT);
         rowB.add(fileB);
         rowB.add( Box.createRigidArea(new Dimension(15,0)) );
@@ -145,7 +161,38 @@ public class createNewProjectExcel {
         dbPanel.add(rowB);
     }/* end buildStepTwo */
   
-   
+/* STEP THREE */   
+    public void buildStepThree()
+    {        
+        JLabel prompt = new JLabel("How is your data orientated?");
+        prompt.setAlignmentX(Component.LEFT_ALIGNMENT);
+        dbPanel.add(prompt);
+        
+        JPanel optionsPanel = new JPanel();
+        optionsPanel.setLayout( new BoxLayout(optionsPanel, BoxLayout.X_AXIS) );
+        
+        ImageIcon horizontal = new ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REUCorpus\\src\\java\\Project\\images\\horizontal.png");
+        ImageIcon vertical = new ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REUCorpus\\src\\java\\Project\\images\\vertical.png");
+        
+        horLabel = new JLabel();
+        horLabel.setIcon(horizontal);
+        vertLabel = new JLabel();
+        vertLabel.setIcon(vertical);
+        
+        horLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        optionsPanel.add(horLabel);
+        optionsPanel.add( Box.createRigidArea(new Dimension(20, 0)) );
+        vertLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        optionsPanel.add( vertLabel );
+        
+        optionsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        dbPanel.add(optionsPanel);
+        dbPanel.revalidate();
+    }
+    
+/*******************************************************************************
+**                             METHODS: GENERAL                               **
+*******************************************************************************/    
     
    public boolean checkAll()
    {
