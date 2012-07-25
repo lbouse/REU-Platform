@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class DataClass extends ArrayList{
     
     private String name;
+    private ArrayList<Integer> dataSizes = new ArrayList<Integer>();
     
     public DataClass(){
         name = "";
@@ -20,6 +21,14 @@ public class DataClass extends ArrayList{
     
     public DataClass(String name){
         this.name = name;
+    }
+    
+    public void addNewSize(int size){
+        dataSizes.add(size);
+    }
+    
+    public ArrayList<Integer> getDataSizes(){
+        return dataSizes;
     }
     
     public String getName(){
@@ -36,6 +45,13 @@ public class DataClass extends ArrayList{
             returnMe.add(this.get(i));
         }
         return returnMe;
+    }
+    
+    public void replace(DataClass real){
+        this.clear();
+        for(int i = 0; i < real.size(); i++){
+            this.add(real.get(i));
+        }
     }
     
     public String toString(){

@@ -21,16 +21,13 @@ public class GlobalTestInfo {
     String DHSQuery2, HHSQuery2, ZHSQuery2;
     ArrayList DHSClassNames2, HHSClassNames2, ZHSClassNames2;
     ArrayList DHSParser2, HHSParser2, ZHSParser2;
-    
     //Use only on HTML page
     String websites = "http://www.directhomes.com/searchResults.cfm?city=&state=&zip=97317&beds=1&baths=1&Max_price=200000&Min_price=%20500&propertyType=Real-Estate END http://www.homefinder.com/zip-code/97317/min_bed_1/min_bath_1/min_price_500/max_price_200000/ END http://www.zillow.com/homes/97318_rb/#/homes/for_sale/Salem-OR-97317/399688_rid/1-_beds/1-_baths/500-200000_price/";
     String tree_node_names = "mainInfo END address EL price EL beds EL baths EL descriptionText END adr EL price EL prop-cola EL prop-colb";
     String parser = "#PATTERN mainInfo EL [ $adress ] EL [ $description ] END #PATTERN address EL [ $address ] EL #PATTERN price EL [ $price ] EL #PATTERN beds EL [ $beds ] EL #PATTERN baths EL [ $baths ] EL #PATTERN descriptionText EL [ $description ] END #PATTERN adr EL [ $address ] EL #PATTERN price EL [ $price ] EL #PATTERN prop-cola EL [ $beds \"Baths:\"-$baths \"Sqft:\"-$sqft \"Lot\"-$lot ] EL #PATTERN prop-colb EL [ $irrelevant ]";
     String t = "";
-    
     ArrayList<ArrayList> printKeys = new ArrayList<ArrayList>();
     ArrayList GlobalSchema = new ArrayList();
-    
     boolean debug = true;
 
     public GlobalTestInfo() {
@@ -39,14 +36,34 @@ public class GlobalTestInfo {
         setupHHS();
         ArrayList temp = new ArrayList();
         temp.add("adr");
+        temp.add("price");
+        temp.add("beds");
+        temp.add("baths");
+        temp.add("description");
+        temp.add("irrelevant");
         printKeys.add(temp);
         ArrayList temp2 = new ArrayList();
         temp2.add("adress");
+        temp2.add("price");
+        temp2.add("beds");
+        temp2.add("baths");
+        temp2.add("description");
+        temp2.add("irrelevant");
         printKeys.add(temp2);
         ArrayList temp3 = new ArrayList();
         temp3.add("address");
+        temp3.add("price");
+        temp3.add("beds");
+        temp3.add("baths");
+        temp3.add("description");
+        temp3.add("irrelevant");
         printKeys.add(temp3);
         GlobalSchema.add("ADDRESS");
+        GlobalSchema.add("PRICE");
+        GlobalSchema.add("BEDS");
+        GlobalSchema.add("BATHS");
+        GlobalSchema.add("DESCRIPTION");
+        GlobalSchema.add("IRRELEVATN");
     }
 
     public void setupZHS() {
@@ -66,17 +83,23 @@ public class GlobalTestInfo {
         ZHSParser.add("#PATTERN prop-colb");
         ZHSParser.add("[ $irrelevant ]");
     }
-    
-    
+
     public void setupDHS() {
         DHSQuery = "http://www.directhomes.com/searchResults.cfm?city=&state=&zip=97317&beds=1&baths=1&Max_price=200000&Min_price=%20500&propertyType=Real-Estate";
         DHSClassNames = new ArrayList();
         DHSClassNames.add("mainInfo");
-//         DHSClassNames.add("subInfo");
+        DHSClassNames.add("subInfo");
         DHSParser = new ArrayList();
         DHSParser.add("#PATTERN mainInfo");
         DHSParser.add("[ $adress ]");
         DHSParser.add("[ $description ]");
+        DHSParser.add("#PATTERN subInfo");
+        DHSParser.add("IF LINES > 4 COMBINE 3 4");
+        DHSParser.add("IF LINES > 4 COMBINE 3 4");
+        DHSParser.add("[ $price ]");
+        DHSParser.add("[ $beds ]");
+        DHSParser.add("[ $baths ]");
+        DHSParser.add("[ $irrelevant ]");
     }
 
     public void setupHHS() {
@@ -99,8 +122,6 @@ public class GlobalTestInfo {
         HHSParser.add("#PATTERN descriptionText");
         HHSParser.add("[ $description ]");
     }
-
-
 
     public String getDHSQuery() {
         return DHSQuery;
@@ -200,8 +221,8 @@ public class GlobalTestInfo {
     }
 
     /*
-     * To display OnlineDatabases you need a global schema, 
-     * and the corresponding words for each OnlineDatabase
+     * To display OnlineDatabases you need a global schema, and the
+     * corresponding words for each OnlineDatabase
      */
     public void printWebsite(OnlineDatabases oD, HttpServletResponse response) throws IOException {
         PrintWriter pw = response.getWriter();
@@ -210,37 +231,37 @@ public class GlobalTestInfo {
 
         if (!oD.isEmpty()) {
             pw.print("<table border=1px>");
-            
-            for(int i = 0; i < GlobalSchema.size(); i++){
+
+            for (int i = 0; i < GlobalSchema.size(); i++) {
                 pw.print("<th>" + GlobalSchema.get(i) + "</th>");
             }
-            
+
             pw.print("</tr>");
             int i = 0;
             for (int index = 0; index < oD.size(); index++) {
                 OnlineDatabase temp = oD.get(index);
                 ArrayList<String> tempKeys = printKeys.get(index);
- 
-                if(debug){
+
+                if (debug) {
                     System.out.println("Name = " + temp.getName());
                     System.out.println("tempKeys size  = " + tempKeys.size());
-                    System.out.println("stored dataKeys "+temp.getSchema());
+//                    System.out.println("stored dataKeys " + temp.getSchema());
                     System.out.println("matched key = " + tempKeys.get(0));
                 }
-                
-                for(int j = 0; j < temp.size(); j++){
+
+                for (int j = 0; j < temp.size(); j++) {
                     if ((i++) % 2 == 0) {
                         pw.print("<tr BGCOLOR ='#fdf5e6'>");
                     } else {
                         pw.print("<tr BGCOLOR ='#c0c0c0'>");
                     }
-                    
-                    for(int k = 0; k < tempKeys.size(); k++){
+
+                    for (int k = 0; k < tempKeys.size(); k++) {
                         pw.println("<td>" + temp.get(j).getValue(tempKeys.get(k)) + "</td>");
                     }
                     pw.println("</tr>");
                 }
-                
+
             }
             pw.print("</table>");
 

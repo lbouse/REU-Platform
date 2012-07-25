@@ -73,9 +73,9 @@ public class Hello extends HttpServlet {
 //            hhs.printGlobalData();
             GeneralSearch zhs = new GeneralSearch(gti.getZHSQuery(), gti.getZHSClassNames(), gti.getZHSParser());
 //            GeneralSearch zhs = new GeneralSearch(gti.getUrls(2), gti.getTrees(2), gti.getParsers(2));
-            zhs.processMyNodes();
+//            zhs.processMyNodes();
             zhs.parseNodes();
-//            zhs.displayNodes();
+            zhs.displayNodes();
 //            zhs.printGlobalData();
 
             oD.add(zhs.getOnlineDatabase());
@@ -87,9 +87,9 @@ public class Hello extends HttpServlet {
             HomeHouseSearch realtorHouseSearch = new HomeHouseSearch();
             ZillowHouseSearch zillowHouseSearch = new ZillowHouseSearch();
 
-            directHouseSearch.searchHouses(keys);
-            realtorHouseSearch.searchHouses(keys);
-            zillowHouseSearch.searchHouses(keys);
+//            directHouseSearch.searchHouses(keys);
+//            realtorHouseSearch.searchHouses(keys);
+//            zillowHouseSearch.searchHouses(keys);
 
             List<HouseInfo> totalHouses = new ArrayList<HouseInfo>();
             List<HouseInfo> directHouses = directHouseSearch.getHouses();
