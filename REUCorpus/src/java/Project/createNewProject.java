@@ -246,12 +246,12 @@ public class createNewProject extends javax.swing.JFrame {
     {
         mainPanel.add( Box.createRigidArea(new Dimension(0, 3)) );
         headerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        mainPanel.add(headerPanel); 
+        mainPanel.add(headerPanel);
 
         final createNewProjectExcel s = new createNewProjectExcel(stepNum);
         s.dbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(s.dbPanel);
-        
+
         nextBtn.addActionListener(new java.awt.event.ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 /* Check to make sure user specified two files */
@@ -287,7 +287,6 @@ public class createNewProject extends javax.swing.JFrame {
             final createNewProjectDB j = new createNewProjectDB(stepNumber, sourceAFields,
                     sourceBFields, sourceADBType, sourceBDBType);
             
-            JOptionPane.showMessageDialog(null, "buildStepThreeA");
             //srcAFields: 0:Host; 1:Port; 2:Database; 3:Username; 4:Password
             SchemaMapping frame = new SchemaMapping(projName, srcType, sourceADBType,
                     sourceBDBType, j.tblNamesA, j.tblNamesB, j.srcAFields, j.srcBFields);
@@ -441,18 +440,6 @@ public class createNewProject extends javax.swing.JFrame {
                 /* Check to make sure user specified two files */
                 if( !s.getOrientation().isEmpty() ){
                     chosenOrientation = new String(s.getOrientation());
-//                        mainPanel.removeAll();
-//                        mainPanel.revalidate();
-//                        mainPanel.repaint();
-//                        stepNumber++;
-//                    try {
-//                        buildStepThreeB( stepNumber, projName, srcType, s.fileA.getText(),
-//                            s.fileB.getText() );
-//                    } catch (ClassNotFoundException ex) {
-//                        Logger.getLogger(createNewProject.class.getName()).log(Level.SEVERE, null, ex);
-//                    } catch (SQLException ex) {
-//                        Logger.getLogger(createNewProject.class.getName()).log(Level.SEVERE, null, ex);
-//                    }
                 }else{ JOptionPane.showMessageDialog(null, "ERROR!\nField left blank."); }
             } 
         });
