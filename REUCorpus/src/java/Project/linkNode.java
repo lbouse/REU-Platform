@@ -1,6 +1,5 @@
 package Project;
 
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -90,8 +89,9 @@ public class linkNode {
     
     public boolean hasEndPoints(int a, int b)
     {
-        if( nodeA.getID() == a && nodeB.getID() == b ) return true;
-        else return false;
+        if( (nodeA.getID() == a && nodeB.getID() == b) ||
+                (nodeA.getID() == b && nodeB.getID() == a) ){ return true; }
+        else{ return false; }
     }
     
     public boolean containsPoint(int a)
@@ -125,4 +125,7 @@ public class linkNode {
     {
         return "y = " + slope + "x" + " + " + yIntercept;
     }
+    
+    public String toString()
+    { return "[linkID:" + linkID + "; nodeA:" + nodeA.getText() + "; nodeB:" + nodeB.getText() + "]\n"; }
 }

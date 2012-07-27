@@ -40,10 +40,13 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
     private JPanel dbPanelB;
     private Color defaultGray = new Color(238, 238, 238);
     
+    private String projName;
     private String srcType;
     private String dbType; //Only used if srcType == Database
     private String dbAType;
+    private String dbAConnect[] = new String[5];
     private String dbBType;
+    private String dbBConnect[] = new String[5];
     private String exlFileA;
     private String exlFileB;
     private JPanel exlPanelA;
@@ -68,12 +71,14 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         dispose();
     }    
     
-    public SchemaMapping( String projName, String sourceType, String srcADBType,
+    //SchemaMapping constructor for Database
+    public SchemaMapping( String pName, String sourceType, String srcADBType,
             String srcBDBType, ArrayList tblA, ArrayList tblB, String[] dbAFields,
             String[] dbBFields) throws ClassNotFoundException, SQLException
     {
         initComponents();
         srcType = new String(sourceType);
+        projName = new String(pName);
         
         if( srcType.equals(" Database") )
         {
@@ -132,14 +137,15 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         }
         else{ JOptionPane.showMessageDialog(null, "ERROR! Invalid source type.\n"
                 + "Error source: SchemaMapping constructor for Databases"); }
-    }
+    }/* End SchemaMapping constructor for DB */
     
     // SchemaMapping constructor for Excel
-    public SchemaMapping(String projName, String sourceType, String xlFileA, String xlFileB, String orientation,
+    public SchemaMapping(String pName, String sourceType, String xlFileA, String xlFileB, String orientation,
             boolean cellSchema)
     {
         initComponents();
         srcType = new String(sourceType);
+        projName = new String(pName);        
 
         String srcAFields[];
         String srcBFields[];
@@ -211,22 +217,13 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
             }
             
             //Load the schema into the window for matching now 
-            //matchingScrollPanel.setAlignmentY(Component.TOP_ALIGNMENT);
             matchingPanel.setLayout( new java.awt.GridLayout(1,0) );
             
             dbPanelA = new JPanel();        
             dbPanelA.setLayout(new BoxLayout(dbPanelA, BoxLayout.PAGE_AXIS));
-//            JLabel tempA = new JLabel(exlFileA);
-//            tempA.setFont(new java.awt.Font("Century Gothic", 0, 22));
-//            tempA.setForeground(new java.awt.Color(102, 102, 102));
-//            dbPanelA.add(tempA);
 
             dbPanelB = new JPanel(new BoxLayout(dbPanelB, BoxLayout.PAGE_AXIS));
             dbPanelB.setLayout(new BoxLayout(dbPanelB, BoxLayout.PAGE_AXIS));
-//            JLabel tempB = new JLabel(exlFileB);
-//            tempA.setFont(new java.awt.Font("Century Gothic", 0, 22));
-//            tempA.setForeground(new java.awt.Color(102, 102, 102));
-//            dbPanelB.add(tempB);
         
             int i;
             for(i = 0; i < srcAFields.length; i++)
@@ -349,21 +346,37 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         Graphics g;
         g = matchingPanel.getGraphics();
         node.setSelectedStatus(true);
-
-        if(!selectedNodes[0].getSelectedStatus())
-        {   
+        int src = node.getFieldSource();
+        
+        if(src < listA)//Source is on the left
+        {
             selectedNodes[0] = node;
             selectedNodes[0].setBackground( new Color(238, 221, 130) );
             selectedNodes[0].setOpaque(true);
             if(linkList.size() > 0){linkList.getLast().setSelected(false);}
         }
-        //else if(!selectedNodes[1].getSelectedStatus())
-        else
-        {   
+        else //source is on the right
+        {
             selectedNodes[1] = node;
-            selectedNodes[1].setBackground( new Color(238, 221, 130));
+            selectedNodes[1].setBackground( new Color(238, 221, 130) );
             selectedNodes[1].setOpaque(true);
+            if(linkList.size() > 0){linkList.getLast().setSelected(false);}            
         }
+            
+//        if(!selectedNodes[0].getSelectedStatus())
+//        {   
+//            selectedNodes[0] = node;
+//            selectedNodes[0].setBackground( new Color(238, 221, 130) );
+//            selectedNodes[0].setOpaque(true);
+//            if(linkList.size() > 0){linkList.getLast().setSelected(false);}
+//        }
+//        //else if(!selectedNodes[1].getSelectedStatus())
+//        else
+//        {   
+//            selectedNodes[1] = node;
+//            selectedNodes[1].setBackground( new Color(238, 221, 130));
+//            selectedNodes[1].setOpaque(true);
+//        }
 
         //If there are two nodes selected, draw a line between them
         if(selectedNodes[0].getSelectedStatus() && selectedNodes[1].getSelectedStatus())
@@ -384,8 +397,8 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
 
                 x1 = selectedNodes[0].getPoint().x + src1X;
                 x2 = selectedNodes[1].getPoint().x + src2X;
-                y1 =  selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
-                y2 =  selectedNodes[1].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();          
+                y1 = selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
+                y2 = selectedNodes[1].getPoint().y + sourcePanels.get(src2).sourcePanel.getY();          
             }
             else if( srcType.equals(" Excel") )
             {
@@ -401,18 +414,6 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
                 y1 =  selectedNodes[0].getPoint().y;
                 y2 =  selectedNodes[1].getPoint().y;  
             }
-
-            
-//            if( srcType.equals(" Database") )
-//            {
-//                y1 = selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
-//                y2 = selectedNodes[1].getPoint().y + sourcePanels.get(src2).sourcePanel.getY();
-//            }
-//            else if( srcType.equals(" Excel") )
-//            {
-//                y1 = selectedNodes[0].getPoint().y + sourcePanels.get(src1).sourcePanel.getY();
-//                y2 = selectedNodes[1].getPoint().y + sourcePanels.get(src2).sourcePanel.getY();
-//            }
 
             selectedNodes[0].setPoint(new Point(x1, y1));
             selectedNodes[1].setPoint(new Point(x2, y2));
@@ -490,7 +491,7 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         optionPanel.setBackground(new java.awt.Color(255, 255, 255));
         optionPanel.setForeground(new java.awt.Color(51, 51, 51));
 
-        newProject.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\new_project.png")); // NOI18N
+        newProject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/new_project.png"))); // NOI18N
         newProject.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 newProjectMouseEntered(evt);
@@ -500,11 +501,16 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
             }
         });
 
-        openProject.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\open_project.png")); // NOI18N
+        openProject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/open_project.png"))); // NOI18N
 
-        saveProject.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\save_project.png")); // NOI18N
+        saveProject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/save_project.png"))); // NOI18N
+        saveProject.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                saveProjectMouseClicked(evt);
+            }
+        });
 
-        addMatch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\add_match.png")); // NOI18N
+        addMatch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/add_match.png"))); // NOI18N
         addMatch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 addMatchMouseClicked(evt);
@@ -517,16 +523,16 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
             }
         });
 
-        removeMatch.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\remove_match.png")); // NOI18N
+        removeMatch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/remove_match.png"))); // NOI18N
         removeMatch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 removeMatchMouseClicked(evt);
             }
         });
 
-        help.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\help.png")); // NOI18N
+        help.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/help.png"))); // NOI18N
 
-        projectSettings.setIcon(new javax.swing.ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REU_Platform\\src\\reu_platform\\images\\proj_settings.png")); // NOI18N
+        projectSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/proj_settings.png"))); // NOI18N
 
         javax.swing.GroupLayout optionPanelLayout = new javax.swing.GroupLayout(optionPanel);
         optionPanel.setLayout(optionPanelLayout);
@@ -636,12 +642,11 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
             selectedNodes[1].setOpaque(true);
         }
         else{ JOptionPane.showMessageDialog(null, "There are less than two nodes currently selected."); }
-               
     }
     
-       //------------------------------
+   //---------------------------------------------------------
    // The following methods were used from ReadExcelGUI.java
-   //------------------------------
+   //---------------------------------------------------------
       private Sheet readExcelSheet (File file) {
         // open excel file (workbook) for reading
         Workbook wbk;
@@ -745,7 +750,53 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         if( !deleted ){ JOptionPane.showMessageDialog(null, "No link selected!"); }
     }//GEN-LAST:event_removeMatchMouseClicked
 
-    
+    private void saveProjectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveProjectMouseClicked
+        String temp[] = { srcType, srcType };
+        List<String[]> tempDBConnects = new ArrayList<String[]>();
+        String exlFiles[];
+        
+        if( srcType.equals(" Database") )
+        {
+            String temp2[] = new String[6];
+            temp2[0] = dbAType;
+            for(int i = 0; i < dbAConnect.length; i++)
+            { temp2[i+1] = dbAConnect[i]; }
+            tempDBConnects.add(temp2);
+            
+            temp2 = new String[6];
+            temp2[0] = dbBType;
+            for(int i = 0; i < dbBConnect.length; i++)
+            { temp2[i+1] = dbBConnect[i]; }
+            tempDBConnects.add(temp2);
+            
+            exlFiles = new String[] {"NA", "NA"};
+        }
+        else if( srcType.equals(" Excel") )
+        {
+            String temp2[] = new String[6];
+            temp2[0] = "NA";
+            tempDBConnects.add(temp2);
+            tempDBConnects.add(temp2);
+            
+            if( !exlFileA.isEmpty() && !exlFileB.isEmpty() )
+            { exlFiles = new String[] {exlFileA, exlFileB}; }
+            else{ exlFiles = new String[] {"NA", "NA"}; }
+        }
+        else
+        {
+            String temp2[] = new String[6];
+            temp2[0] = "NA";
+            tempDBConnects.add(temp2);
+            tempDBConnects.add(temp2);
+            
+            exlFiles = new String[] {"NA", "NA"};            
+        }
+        
+    /*(String pName, int srcCnt, String dataTypes[], List<String> dbConnects,
+            String excelFiles[], sourceNode localSchemas[], linkNode schemaLinks[])*/
+        saveProject frame = new saveProject(projName, 2, temp, tempDBConnects, exlFiles, sourcePanels, linkList );
+        frame.setVisible(true);
+    }//GEN-LAST:event_saveProjectMouseClicked
     
     public void paint(Graphics g)     //note paint method
     {   
@@ -760,21 +811,6 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
             g = matchingPanel.getGraphics();
             g.setColor(Color.BLACK);
             g.drawLine(x1, y1, x2, y2);
-//            
-//            if( linkList.get(i).isSelected() )
-//            {
-//                linkList.get(i).nodeA.setBackground(new Color(238, 221, 130));
-//                linkList.get(i).nodeB.setBackground(new Color(238, 221, 130));
-//                g.setColor( new Color(238, 221, 130) );
-//                
-//                y1 += 1;
-//                y2 += 1;
-//                g.drawLine( x1, y1, x2, y2);
-//                
-//                y1 -= 2;
-//                y2 -= 2;
-//                g.drawLine(x1, y1, x2, y2);
-//            }
         }
     }
     

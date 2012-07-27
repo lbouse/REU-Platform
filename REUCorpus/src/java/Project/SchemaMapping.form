@@ -162,7 +162,7 @@
             <Component class="javax.swing.JLabel" name="newProject">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\new_project.png"/>
+                  <Image iconType="3" name="/Project/images/new_project.png"/>
                 </Property>
               </Properties>
               <Events>
@@ -173,21 +173,24 @@
             <Component class="javax.swing.JLabel" name="openProject">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\open_project.png"/>
+                  <Image iconType="3" name="/Project/images/open_project.png"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="saveProject">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\save_project.png"/>
+                  <Image iconType="3" name="/Project/images/save_project.png"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="saveProjectMouseClicked"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="addMatch">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\add_match.png"/>
+                  <Image iconType="3" name="/Project/images/add_match.png"/>
                 </Property>
               </Properties>
               <Events>
@@ -199,7 +202,7 @@
             <Component class="javax.swing.JLabel" name="removeMatch">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\remove_match.png"/>
+                  <Image iconType="3" name="/Project/images/remove_match.png"/>
                 </Property>
               </Properties>
               <Events>
@@ -209,14 +212,14 @@
             <Component class="javax.swing.JLabel" name="help">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\help.png"/>
+                  <Image iconType="3" name="/Project/images/help.png"/>
                 </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="projectSettings">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\Bouse\Documents\NetBeansProjects\REU-Platform\REU_Platform\src\reu_platform\images\proj_settings.png"/>
+                  <Image iconType="3" name="/Project/images/proj_settings.png"/>
                 </Property>
               </Properties>
             </Component>
