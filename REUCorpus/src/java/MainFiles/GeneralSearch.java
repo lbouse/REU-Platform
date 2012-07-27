@@ -5,17 +5,11 @@
 package MainFiles;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
 import org.htmlparser.filters.HasAttributeFilter;
-import org.htmlparser.nodes.TagNode;
-import org.htmlparser.tags.TableRow;
-import org.htmlparser.tags.TableTag;
-import org.htmlparser.util.NodeIterator;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
@@ -30,8 +24,11 @@ public class GeneralSearch {
     private ArrayList classNames = new ArrayList(), parseInfo = new ArrayList();
     private ArrayList<DataClass> listOfData = new ArrayList<DataClass>();
     private OnlineDatabase onlineDatabase = new OnlineDatabase();
-    boolean debug = true;
+    private boolean debug = true;
 
+    /*
+     * Default Constructor
+     */
     public GeneralSearch() {
     }
 
@@ -40,58 +37,33 @@ public class GeneralSearch {
         this.classNames = classNames;
         this.parseInfo = parseInfo;
         this.onlineDatabase.setName(finalQueryString);
-        if (debug) {
-            System.out.println("finalQueryString  = " + finalQueryString);
-            System.out.println("classNames = " + toStringArrayList(classNames));
-            System.out.println("parseInfo = " + toStringArrayList(parseInfo));
+    }
+    
+    public String toString(){
+        String returnMe = "";
+        returnMe += "\nQ = " + finalQueryString;
+        returnMe += "\nN = " + toStringArrayList(classNames);
+        returnMe += "\nP = " + toStringArrayList(parseInfo);
+        return returnMe;
+    }
+
+    /*
+     * Gets information from online database
+     */
+    public void processNodes() throws ParserException {
+        try {
+            for (int i = 0; i < classNames.size(); i++) {
+                processNodesHelper("" + classNames.get(i));
+            }
+        } catch (ParserException e) {
+            e.printStackTrace();
         }
     }
 
-    public void processMyNodes(Node node) {
-        if (node instanceof TagNode) {
-            TagNode tag = (TagNode) node;
-
-            if (node instanceof TableTag) {
-                TableTag tableTag = (TableTag) node;
-            }
-            if (node instanceof TableRow) {
-                TableRow tableRowTag = (TableRow) node;
-
-                if (tag.getAttribute("class") != null && tag.getAttribute("class").equalsIgnoreCase("resultsListing")) {
-                    HouseInfo directHouse = new HouseInfo("http://www.directhomes.com");
-
-                    Node thirdChildNode = tableRowTag.childAt(3).getFirstChild().getNextSibling();
-                    Node addressNode = thirdChildNode.getFirstChild().getNextSibling();
-                    directHouse.setAddress(addressNode.toPlainTextString().trim());
-
-                    Node descriptionNode = tableRowTag.childAt(3).getLastChild();
-                    directHouse.setDescription(descriptionNode.toPlainTextString());
-
-                    Node priceNode = tableRowTag.childAt(5).getFirstChild().getNextSibling();
-                    directHouse.setPrice(priceNode.toPlainTextString().trim());
-
-                    Node bedBathNode = tableRowTag.childAt(5).getLastChild().getPreviousSibling().getPreviousSibling();
-                    directHouse.setBedBath(bedBathNode.toPlainTextString().trim());
-
-                    directHouses.add(directHouse);
-                }
-
-            }
-
-            NodeList nl = tag.getChildren();
-            if (nl != null) {
-                try {
-                    for (NodeIterator i = nl.elements(); i.hasMoreNodes();) {
-                        processMyNodes(i.nextNode());
-                    }
-                } catch (ParserException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public void processClass(String className) throws ParserException {
+    /*
+     * Gets information for given className
+     */
+    public void processNodesHelper(String className) throws ParserException {
         Parser parser = new Parser(finalQueryString);
         NodeFilter addressFilter = new HasAttributeFilter("class", className);
         NodeList addressList = parser.parse(addressFilter);
@@ -120,108 +92,68 @@ public class GeneralSearch {
         listOfData.add(list);
     }
 
-    public void processMyNodes() throws ParserException {
-        try {
-            for (int i = 0; i < classNames.size(); i++) {
-                processClass("" + classNames.get(i));
-                if (debug) {
-                    System.out.println("Processed " + classNames.get(i));
-                    System.out.println("Sizes per className = " + listOfData.get(i).getDataSizes());
-                }
-
-            }
-        } catch (ParserException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void printGlobalData() {
-        if (debug) {
-            System.out.println("Pringting Global Data");
-            System.out.println("Global Data Size " + onlineDatabase.size());
-        }
-        for (int i = 0; i < onlineDatabase.size(); i++) {
-            System.out.println("Entry " + i);
-            System.out.println("" + onlineDatabase.get(i));
-        }
-    }
-
-    public ArrayList parseSpecialCommands(DataClass dataClass, ArrayList<String> parseData) {
-//        System.out.println(""+dataClass);
-        ArrayList parsingTheParser = new ArrayList();
-        ArrayList<Integer> sizes = dataClass.getDataSizes();
-//        System.out.println(""+sizes);
-        for (int i = 0; i < parseData.size(); i++) {
-            String[] elements = parseData.get(i).split(" ");
-            if (elements[0].equals("IF")) {
-                if ((elements[1]).equals("LINES")) {
-                    //currently only supports >, so element[2] always equals 
-                    int lines = Integer.parseInt("" + elements[3]);
-                    //check whether condition is true before proceedeing
-
-                    int total = 0;
-                    for (int j = 0; j < sizes.size(); j++) {
-//                        total += sizes.get(j);
-                        if (sizes.get(j) > lines) {                              //Not Done, find out the number of variables and divide by that
-                            if ((elements[4]).equals("COMBINE")) {
-                                //Let's start with only combining two
-                                int first = Integer.parseInt("" + elements[5]) - 1;
-                                int second = Integer.parseInt("" + elements[6]) - 1 ;
-                                //now Loop through dataClass and combine Data
-                               
-//                                System.out.println("total = " + total + " first = " + first + " second = " + second);
-                                dataClass.set(total + first, ""+dataClass.get(total + first) + " " + dataClass.get(total + second));
-                                dataClass.set(total + second, "DELETE LINE");
-                                total += sizes.get(j);
-                                sizes.set(j, sizes.get(j) - 1);
-                            }
-                        } else{
-                            total += sizes.get(j);
-                        } 
-//                        total += sizes.get(j);
-                    }
-                }
-
-            } else {
-                break;
-            }
-            DataClass real = new DataClass();
-            for(int j = 0; j < dataClass.size(); j++){
-                if(!dataClass.get(j).equals("DELETE LINE")){
-                    real.add(dataClass.get(j));
-                }
-            }
-            dataClass.replace(real);
-            //
-        // Go through dataclass and remove all DELETE LINEs
-        //
-        }
-//        System.out.println(""+dataClass);
-        for(int i = 0; i < parseData.size(); i++){
-            if(parseData.get(i).charAt(0) != '['){
-                parseData.remove(i);
-                i--;
-            }
-        }
-        System.out.println(""+parseData);
-        return parsingTheParser;
-    }
-
+    /*
+     * Parses the information it processed
+     */
     public void parseNodes() {
-        if (debug) {
-            System.out.println("Parsing Nodes");
-        }
         for (int i = 0; i < listOfData.size(); i++) {
             DataClass dataClass = (DataClass) listOfData.get(i);
             ArrayList<String> parseInfo2 = getMatchingParseData(dataClass.getName());
             System.out.println("Mathcing parse info for " + dataClass.getName() + " : " + parseInfo2);
 
             parseSpecialCommands(dataClass, parseInfo2);
+            System.out.println("After special " + i + " = " + parseInfo2);
             applyParserOn(dataClass, parseInfo2);
         }
     }
 
+    /*
+     * Takes care of any special commands
+     */
+    public void parseSpecialCommands(DataClass dataClass, ArrayList<String> parseData) {
+        ArrayList<Integer> sizes = dataClass.getDataSizes();                                        //gets the sizes of each query
+        for (int i = 0; i < parseData.size(); i++) {                                                //loops through parse commnads looking for special commands
+            String[] elements = parseData.get(i).split(" ");
+            if (elements[0].equals("IF")) {                                                         //currently it only supports IF
+                if ((elements[1]).equals("LINES")) {                                                //currently it only supports LINES
+                    //currently it only supports >, so element[2] is always >
+                    int lines = Integer.parseInt("" + elements[3]);
+                    int total = 0;                                                                  //keeps track of where you are on dataClass
+                    for (int j = 0; j < sizes.size(); j++) {
+                        if (sizes.get(j) > lines) {
+                            if ((elements[4]).equals("COMBINE")) {                                  //currently it only supports COMBINE with 2 parameters
+                                int first = Integer.parseInt("" + elements[5]) - 1;
+                                int second = Integer.parseInt("" + elements[6]) - 1;
+                                dataClass.set(total + first, "" + dataClass.get(total + first) + " " + dataClass.get(total + second));      //does the combining
+                                dataClass.set(total + second, "DELETE LINE");                       //does not deltete the combined line, replaces it with DELETE LINE, and then it's deleted after looping through sizes
+                                total += sizes.get(j);
+                                sizes.set(j, sizes.get(j) - 1);                                     //makes sizes smaller
+                            }
+                        } else {
+                            total += sizes.get(j);
+                        }
+                    }
+                }
+
+            } else {
+                break;                                                                              //breaks immediatly after not finding a special command
+            }
+            dataClass.removeDELETELINE();
+//            System.out.println("i = "+ i + " "+dataClass);
+        }
+        for (int i = 0; i < parseData.size(); i++) {                                                //removes special commands in parseData
+            if (parseData.get(i).charAt(0) != '[') {
+                parseData.remove(i);
+                i--;
+            }
+        }
+    }
+
+    /*
+     * Applies non special commands on dataClass, probably the most consufing 
+     */
     public void applyParserOn(DataClass dataClass, ArrayList parseInfo2) {
+        System.out.println("dataClass ? " + dataClass);
         for (int i = 0; i < dataClass.size(); i++) {                                //assumes very line is a simple [ ] line command
             String data = (String) (dataClass.get(i));                              //raw string, unparsed
             String[] params = ((String) (parseInfo2.get(i % parseInfo2.size()))).split(" ");                     //parseInfo list into seperate components, and it gets parseInfo for the line its in, handles more than one line of code
@@ -240,6 +172,9 @@ public class GeneralSearch {
         }
     }
 
+    /*
+     * Gets variable names in command
+     */
     public String[] getVariableNames(String[] params) {
         ArrayList list = new ArrayList();
         for (int i = 0; i < params.length; i++) {
@@ -257,7 +192,6 @@ public class GeneralSearch {
                         count2++;
                     }
                 }
-//                System.out.println("str = " + str + " count1 = "+ count1 + " count2 = " + count2);
                 list.add(str.substring(count1 + 1, count1 + count2));
             }
         }
@@ -268,6 +202,9 @@ public class GeneralSearch {
         return returnMe;
     }
 
+    /*
+     * parses dataString given the parameters, returning the information that needs to be saved
+     */
     public String[] parseAgain(String dataString, String[] params) {
         ArrayList temp = new ArrayList();
         String ds = dataString;
@@ -275,11 +212,13 @@ public class GeneralSearch {
             String piece = params[i];
             if (piece.charAt(0) == '\"') {
                 String pieceInQuotes = pieceInQuotes(piece);
-//                System.out.println("pieceInQuotes = " + pieceInQuotes);
                 String[] nut = ds.split(pieceInQuotes, 2);
-//                System.out.println("nut = "+toStringArray(nut));
                 temp.add(nut[0]);
-                ds = pieceInQuotes + nut[1];
+                System.out.println("NUT "+ toStringArray(nut));
+                ds = pieceInQuotes + nut[1];                                        //makes sure to add the last piece
+            }
+            else if( piece.charAt(0) == '\\'){
+                
             }
         }
         temp.add(ds);
@@ -290,6 +229,9 @@ public class GeneralSearch {
         return returnMe;
     }
 
+    /*
+     * return the piece in quotes
+     */
     public String pieceInQuotes(String string) {                         //gets the positions of all the quotes
         ArrayList list = new ArrayList();
         for (int i = 0; i < string.length(); i++) {
@@ -300,15 +242,32 @@ public class GeneralSearch {
         return string.substring(Integer.parseInt("" + list.get(0)) + 1, Integer.parseInt("" + list.get(1)));
     }
 
+    /*
+     * prints global data in console
+     */
+    public void printGlobalData() {
+        for (int i = 0; i < onlineDatabase.size(); i++) {
+            System.out.println("Entry " + i);
+            System.out.println("" + onlineDatabase.get(i));
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Useful toString functions">
     public String toStringArray(String[] params) {
+        if (params.length == 0) {
+            return null;
+        }
         String returnMe = "";
         for (int i = 0; i < params.length; i++) {
-            returnMe += " " + i + " = [ " + params[i] + " ]";
+            returnMe +=  " { "+params[i] + " } ";
         }
         return returnMe;
     }
 
     public String toStringArrayList(ArrayList list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
         String returnMe = "";
         for (int i = 0; i < list.size(); i++) {
             returnMe += list.get(i) + " ";
@@ -316,15 +275,14 @@ public class GeneralSearch {
         return returnMe.trim();
     }
 
+    // </editor-fold>
+    
     public void displayNodes() {
-        if (debug) {
-            System.out.println("Displaying Nodes");
-        }
         for (int i = 0; i < listOfData.size(); i++) {
             System.out.println("" + listOfData.get(i));
         }
     }
-
+    
     private ArrayList<String> getMatchingParseData(String str) {
         ArrayList<String> list = new ArrayList();
         boolean record = false;
@@ -348,6 +306,7 @@ public class GeneralSearch {
         return list;
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Get Functions">
     public List<HouseInfo> getHouses() {
         return directHouses;
     }
@@ -371,4 +330,5 @@ public class GeneralSearch {
     public OnlineDatabase getOnlineDatabase() {
         return onlineDatabase;
     }
+    // </editor-fold>
 }

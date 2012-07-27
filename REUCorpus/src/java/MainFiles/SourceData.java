@@ -13,7 +13,13 @@ import java.util.HashMap;
  */
 public class SourceData {
     
+    /*
+     * Stores the variable names
+     */
     private ArrayList keys;
+    /*
+     * Stores the values, where the variable names are the keys
+     */
     private HashMap data;
     
     public SourceData(){
@@ -21,6 +27,9 @@ public class SourceData {
         data = new HashMap();
     }
     
+    /*
+     * Saves data
+     */
     public void save(String key, String value){
         keys.add(key);
         data.put(key, value);

@@ -1,94 +1,25 @@
-$ 94,900
-2 bd,
-1                                               3
-ba                                              4
-MLS ID #653454
-$ 134,900
-3 bd,
-1                                               8
-/ 1-&#189                                       9
-ba
-MLS ID #651342
-$ 119,900
-3 bd,                                           
-1                                               14
-ba                                              15
-MLS ID #652620
-$ 114,900
-3 bd,                                           
-1                                               19
-/ 1-&#189                                       20
-ba
-MLS ID #652800
-$ 145,900
-3 bd,
-1                               [5, 6, 5, 6, 5, 5, 5, 6, 5, 5]      25
-ba                                              26
-MLS ID #11630657
-$ 44,500
-2 bd,
-2                                               30
-ba                                              31
-MLS ID #653662
-$ 125,000
-3 bd,
-2                                               35
-ba                                              36
-MLS ID #653507
-$ 165,000
-3 bd,
-1                                               40
-/ 1-&#189                                       41
-ba
-MLS ID #12448421
-$ 110,000
-3 bd,
-2                                               46
-ba                                              47
-MLS ID #653232
-$ 135,000
-3 bd,
-2                                               51
-ba                                              52
-MLS ID #652251
+Global Schema
+ADDRESS EL PRICE EL BEDS EL BATHS EL DESCRIPTION EL IRRE
 
-$ 94,900
-2 bd,
-1 ba
-MLS ID #653454
-$ 134,900
-3 bd, 1
-/ 1-&#189 ba
-MLS ID #651342
-$ 119,900 3 bd,
-1
-ba
-MLS ID #652620 $ 114,900
-3 bd,
-1 / 1-&#189
-ba MLS ID #652800
-$ 145,900
-3 bd,
-1 ba
-MLS ID #11630657
-$ 44,500
-2 bd, 2
-ba
-MLS ID #653662
-$ 125,000 3 bd,
-2
-ba
-MLS ID #653507
-$ 165,000 3 bd,
-1 / 1-&#189
-ba MLS ID #12448421
-$ 110,000
-3 bd,
-2
-ba
-MLS ID #653232
-$ 135,000
-3 bd,
-2
-ba
-MLS ID #652251
+Individual
+
+http://www.zillow.com/homes/97318_rb/#/homes/for_sale/Salem-OR-97317/399688_rid/1-_beds/1-_baths/500-200000_price/
+adr EL price EL prop-cola EL prop-colb
+#PATTERN adr EL [ $adr ] EL #PATTERN price EL [ $price ] EL #PATTERN prop-cola EL [ $beds "Baths:"-$baths "Sqft:"-$sqft "Lot:"-$lot ] EL #PATTERN prop-colb EL IF LINES > 1 COMBINE 1 2 EL IF LINES > 1 COMBINE 1 2 EL IF LINES > 1 COMBINE 1 2 EL [ $irrelevant ]
+adr EL price EL beds EL baths EL description EL irrelevant
+
+http://www.directhomes.com/searchResults.cfm?city=&state=&zip=97317&beds=1&baths=1&Max_price=200000&Min_price=%20500&propertyType=Real-Estate
+mainInfo EL subInfo 
+#PATTERN mainInfo EL [ $adress ] EL [ $description ] EL #PATTERN subInfo EL IF LINES > 4 COMBINE 3 4 EL IF LINES > 4 COMBINE 3 4 EL [ $price ] EL [ $beds ] EL [ $baths ] EL [ $irrelevant ]
+adress EL price EL beds EL baths EL description EL irrelevant
+
+http://www.homefinder.com/zip-code/97317/min_bed_1/min_bath_1/min_price_500/max_price_200000/
+address EL price EL beds EL baths EL descriptionText
+#PATTERN address EL [ $address ] EL #PATTERN price EL [ $price ] EL #PATTERN beds EL [ $beds ] EL #PATTERN baths EL [ $baths ] EL #PATTERN descriptionText EL [ $description ]
+address EL price EL beds EL baths EL description EL irrelevant
+
+ALL
+http://www.zillow.com/homes/97318_rb/#/homes/for_sale/Salem-OR-97317/399688_rid/1-_beds/1-_baths/500-200000_price/ END http://www.directhomes.com/searchResults.cfm?city=&state=&zip=97317&beds=1&baths=1&Max_price=200000&Min_price=%20500&propertyType=Real-Estate END http://www.homefinder.com/zip-code/97317/min_bed_1/min_bath_1/min_price_500/max_price_200000/
+adr EL price EL prop-cola EL prop-colb END mainInfo EL subInfo END address EL price EL beds EL baths EL descriptionText 
+#PATTERN adr EL [ $adr ] EL #PATTERN price EL [ $price ] EL #PATTERN prop-cola EL [ $beds "Baths:"-$baths "Sqft:"-$sqft "Lot:"-$lot ] EL #PATTERN prop-colb EL IF LINES > 1 COMBINE 1 2 EL IF LINES > 1 COMBINE 1 2 EL IF LINES > 1 COMBINE 1 2 EL [ $irrelevant ] END #PATTERN mainInfo EL [ $adress ] EL [ $description ] EL #PATTERN subInfo EL IF LINES > 4 COMBINE 3 4 EL IF LINES > 4 COMBINE 3 4 EL [ $price ] EL [ $beds ] EL [ $baths ] EL [ $irrelevant ] END #PATTERN address EL [ $address ] EL #PATTERN price EL [ $price ] EL #PATTERN beds EL [ $beds ] EL #PATTERN baths EL [ $baths ] EL #PATTERN descriptionText EL [ $description ]
+adr EL price EL beds EL baths EL description EL irrelevant END adress EL price EL beds EL baths EL description EL irrelevant END address EL price EL beds EL baths EL description EL irrelevant

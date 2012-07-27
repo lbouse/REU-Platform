@@ -12,6 +12,9 @@ import java.util.ArrayList;
  */
 public class OnlineDatabases extends ArrayList<OnlineDatabase>{
     
+    /*
+     * We could add more functionalities, I'm not sure if we need to though
+     */
     
     public OnlineDatabases(){
         

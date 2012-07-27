@@ -12,8 +12,14 @@ import java.util.ArrayList;
  */
 public class OnlineDatabase extends ArrayList<SourceData>{
     
+    /*
+     * @param name stores the url
+     */
     private String name;
     
+    /*
+     * Default constructor
+     */
     public OnlineDatabase(){
         
     }
@@ -22,6 +28,9 @@ public class OnlineDatabase extends ArrayList<SourceData>{
         this.name = name;
     }
     
+    /*
+     * Returns the variable names, every element in OnlineDatabase should have the same variable names
+     */
     public ArrayList getSchema(){
         return ((SourceData)(this.get(0))).getKeys();
     }

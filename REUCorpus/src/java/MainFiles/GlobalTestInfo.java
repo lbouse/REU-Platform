@@ -15,81 +15,191 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class GlobalTestInfo {
 
-    String DHSQuery, HHSQuery, ZHSQuery;
-    ArrayList DHSClassNames, HHSClassNames, ZHSClassNames;
-    ArrayList DHSParser, HHSParser, ZHSParser;
-    String DHSQuery2, HHSQuery2, ZHSQuery2;
-    ArrayList DHSClassNames2, HHSClassNames2, ZHSClassNames2;
-    ArrayList DHSParser2, HHSParser2, ZHSParser2;
-    //Use only on HTML page
-    String websites = "http://www.directhomes.com/searchResults.cfm?city=&state=&zip=97317&beds=1&baths=1&Max_price=200000&Min_price=%20500&propertyType=Real-Estate END http://www.homefinder.com/zip-code/97317/min_bed_1/min_bath_1/min_price_500/max_price_200000/ END http://www.zillow.com/homes/97318_rb/#/homes/for_sale/Salem-OR-97317/399688_rid/1-_beds/1-_baths/500-200000_price/";
-    String tree_node_names = "mainInfo END address EL price EL beds EL baths EL descriptionText END adr EL price EL prop-cola EL prop-colb";
-    String parser = "#PATTERN mainInfo EL [ $adress ] EL [ $description ] END #PATTERN address EL [ $address ] EL #PATTERN price EL [ $price ] EL #PATTERN beds EL [ $beds ] EL #PATTERN baths EL [ $baths ] EL #PATTERN descriptionText EL [ $description ] END #PATTERN adr EL [ $address ] EL #PATTERN price EL [ $price ] EL #PATTERN prop-cola EL [ $beds \"Baths:\"-$baths \"Sqft:\"-$sqft \"Lot\"-$lot ] EL #PATTERN prop-colb EL [ $irrelevant ]";
-    String t = "";
-    ArrayList<ArrayList> printKeys = new ArrayList<ArrayList>();
-    ArrayList GlobalSchema = new ArrayList();
-    boolean debug = true;
+    /*
+     * Global variables that store the parsed input data
+     */
+    private ArrayList<String> globalUrls = new ArrayList<String>();
+    private ArrayList<ArrayList> globalTreeNodeNames = new ArrayList<ArrayList>();
+    private ArrayList<ArrayList> globalParsers = new ArrayList<ArrayList>();
+    private int globalSize = 0;
+    /*
+     * Contains the selected local schema for each online database, size must
+     * match globalSchema
+     */
+    ArrayList<ArrayList<String>> printKeys = new ArrayList<ArrayList<String>>();
+    /*
+     * Contains the selected global schema used to build the database, size must
+     * match printKeys
+     */
+    ArrayList<String> globalSchema = new ArrayList<String>();
 
+    /*
+     * Default Constructor
+     */
     public GlobalTestInfo() {
+    }
+
+    /*
+     * Receives unparsed inputs from Hello.java and parses them into global parsed inputes
+     */
+    public void parseAllData(String unparsedGlobalWebsites, String unparsedGlobalTreeNodeNames, String unparsedGlobalParsers, String unparsedPrintKeys, String unparsedGlobalSchema) {
+
+        String[] tempUrls = unparsedGlobalWebsites.split("END");
+        for (int i = 0; i < tempUrls.length; i++) {
+            globalUrls.add(tempUrls[i].trim());
+        }
+        globalSize = globalUrls.size();
+        
+        String[] tempTreeNodeNames = unparsedGlobalTreeNodeNames.split("END");
+        for (int i = 0; i < tempTreeNodeNames.length; i++) {
+            String[] temp = tempTreeNodeNames[i].split("EL");
+            ArrayList temp2 = new ArrayList();
+            for (int j = 0; j < temp.length; j++) {
+                temp2.add(temp[j].trim());
+            }
+            globalTreeNodeNames.add(temp2);
+        }
+
+        String[] tempParsing = unparsedGlobalParsers.split("END");
+        for (int i = 0; i < tempParsing.length; i++) {
+            String[] temp = tempParsing[i].split("EL");
+            ArrayList temp2 = new ArrayList();
+            for (int j = 0; j < temp.length; j++) {
+                temp2.add(temp[j].trim());
+            }
+            globalParsers.add(temp2);
+        }
+
+        String[] tempPrintKeys = unparsedPrintKeys.split("END");
+        for (int i = 0; i < tempPrintKeys.length; i++) {
+            String[] temp = tempPrintKeys[i].split("EL");
+            ArrayList temp2 = new ArrayList();
+            for (int j = 0; j < temp.length; j++) {
+                temp2.add(temp[j].trim());
+            }
+            printKeys.add(temp2);
+        }
+        
+        String[] tempGlobalSchema = unparsedGlobalSchema.split("EL");
+        for (int j = 0; j < tempGlobalSchema.length; j++) {
+            globalSchema.add(tempGlobalSchema[j].trim());
+        }
+    }
+
+    /*
+     * Builds html table Requires global schema, and the corresponding schema
+     * from each online database
+     */
+    public void printWebsite(OnlineDatabases oD, HttpServletResponse response) throws IOException {
+        PrintWriter pw = response.getWriter();
+        pw.println("<HTML><HEAD><TITLE>Search Results</TITLE></HEAD><BODY>");
+        pw.println("<br>");
+
+        if (!oD.isEmpty()) {
+            pw.print("<table border=1px>");
+
+            for (int i = 0; i < globalSchema.size(); i++) {
+                pw.print("<th>" + globalSchema.get(i) + "</th>");
+            }
+
+            pw.print("</tr>");
+            int i = 0;
+            for (int index = 0; index < oD.size(); index++) {
+                OnlineDatabase temp = oD.get(index);
+                ArrayList<String> tempKeys = printKeys.get(index);
+                System.out.println("" + temp.size());
+                for (int j = 0; j < temp.size(); j++) {
+                    if ((i++) % 2 == 0) {
+                        pw.print("<tr BGCOLOR ='#fdf5e6'>");
+                    } else {
+                        pw.print("<tr BGCOLOR ='#c0c0c0'>");
+                    }
+
+                    for (int k = 0; k < tempKeys.size(); k++) {
+                        pw.println("<td>" + temp.get(j).getValue(tempKeys.get(k)) + "</td>");
+                    }
+                    pw.println("</tr>");
+                }
+
+            }
+            pw.print("</table>");
+
+            pw.println("</BODY></HTML>");
+            pw.close();
+
+        } else {
+            pw.println("Your queries do not return any results");
+            pw.println("</BODY>");
+            pw.println("</HTML>");
+
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="Code that configures a default query">
+    /*
+     * Sets a default query for three online databases Also sets up a default
+     * global schema
+     */
+    public void setupDefaultQuery() {
         setupZHS();
         setupDHS();
         setupHHS();
-        ArrayList temp = new ArrayList();
-        temp.add("adr");
-        temp.add("price");
-        temp.add("beds");
-        temp.add("baths");
-        temp.add("description");
-        temp.add("irrelevant");
-        printKeys.add(temp);
-        ArrayList temp2 = new ArrayList();
-        temp2.add("adress");
-        temp2.add("price");
-        temp2.add("beds");
-        temp2.add("baths");
-        temp2.add("description");
-        temp2.add("irrelevant");
-        printKeys.add(temp2);
-        ArrayList temp3 = new ArrayList();
-        temp3.add("address");
-        temp3.add("price");
-        temp3.add("beds");
-        temp3.add("baths");
-        temp3.add("description");
-        temp3.add("irrelevant");
-        printKeys.add(temp3);
-        GlobalSchema.add("ADDRESS");
-        GlobalSchema.add("PRICE");
-        GlobalSchema.add("BEDS");
-        GlobalSchema.add("BATHS");
-        GlobalSchema.add("DESCRIPTION");
-        GlobalSchema.add("IRRELEVATN");
+        globalSchema.add("ADDRESS");
+        globalSchema.add("PRICE");
+        globalSchema.add("BEDS");
+        globalSchema.add("BATHS");
+        globalSchema.add("DESCRIPTION");
+        globalSchema.add("IRRE");
     }
 
-    public void setupZHS() {
+    /*
+     * Default variables for Zillow, Direct, and Home
+     */
+    private String DHSQuery, HHSQuery, ZHSQuery;
+    private ArrayList<String> DHSClassNames, HHSClassNames, ZHSClassNames;
+    private ArrayList<String> DHSParser, HHSParser, ZHSParser;
+
+    /*
+     * Sets default values for Zillow
+     */
+    private void setupZHS() {
         ZHSQuery = "http://www.zillow.com/homes/97318_rb/#/homes/for_sale/Salem-OR-97317/399688_rid/1-_beds/1-_baths/500-200000_price/";
-        ZHSClassNames = new ArrayList();
+        ZHSClassNames = new ArrayList<String>();
         ZHSClassNames.add("adr");
         ZHSClassNames.add("price");
         ZHSClassNames.add("prop-cola");
         ZHSClassNames.add("prop-colb");
-        ZHSParser = new ArrayList();
+        ZHSParser = new ArrayList<String>();
         ZHSParser.add("#PATTERN adr");
         ZHSParser.add("[ $adr ]");
         ZHSParser.add("#PATTERN price");
         ZHSParser.add("[ $price ]");
         ZHSParser.add("#PATTERN prop-cola");
-        ZHSParser.add("[ $beds \"Baths:\"-$baths \"Sqft:\"-$sqft \"Lot\"-$lot ]");
+        ZHSParser.add("[ $beds \"Baths:\"-$baths \"Sqft:\"-$sqft \"Lot:\"-$lot ]");
         ZHSParser.add("#PATTERN prop-colb");
+        ZHSParser.add("IF LINES > 1 COMBINE 1 2");
+        ZHSParser.add("IF LINES > 1 COMBINE 1 2");
+        ZHSParser.add("IF LINES > 1 COMBINE 1 2");
         ZHSParser.add("[ $irrelevant ]");
+        ArrayList<String> selectedSchema = new ArrayList<String>();
+        selectedSchema.add("adr");
+        selectedSchema.add("price");
+        selectedSchema.add("beds");
+        selectedSchema.add("baths");
+        selectedSchema.add("description");
+        selectedSchema.add("irrelevant");
+        printKeys.add(selectedSchema);
     }
 
-    public void setupDHS() {
+    /*
+     * Sets default values for Direct
+     */
+    private void setupDHS() {
         DHSQuery = "http://www.directhomes.com/searchResults.cfm?city=&state=&zip=97317&beds=1&baths=1&Max_price=200000&Min_price=%20500&propertyType=Real-Estate";
-        DHSClassNames = new ArrayList();
+        DHSClassNames = new ArrayList<String>();
         DHSClassNames.add("mainInfo");
         DHSClassNames.add("subInfo");
-        DHSParser = new ArrayList();
+        DHSParser = new ArrayList<String>();
         DHSParser.add("#PATTERN mainInfo");
         DHSParser.add("[ $adress ]");
         DHSParser.add("[ $description ]");
@@ -100,17 +210,28 @@ public class GlobalTestInfo {
         DHSParser.add("[ $beds ]");
         DHSParser.add("[ $baths ]");
         DHSParser.add("[ $irrelevant ]");
+        ArrayList<String> selectedSchema = new ArrayList<String>();
+        selectedSchema.add("adress");
+        selectedSchema.add("price");
+        selectedSchema.add("beds");
+        selectedSchema.add("baths");
+        selectedSchema.add("description");
+        selectedSchema.add("irrelevant");
+        printKeys.add(selectedSchema);
     }
 
-    public void setupHHS() {
+    /*
+     * Sets default values for Home
+     */
+    private void setupHHS() {
         HHSQuery = "http://www.homefinder.com/zip-code/97317/min_bed_1/min_bath_1/min_price_500/max_price_200000/";
-        HHSClassNames = new ArrayList();
+        HHSClassNames = new ArrayList<String>();
         HHSClassNames.add("address");
         HHSClassNames.add("price");
         HHSClassNames.add("beds");
         HHSClassNames.add("baths");
         HHSClassNames.add("descriptionText");
-        HHSParser = new ArrayList();
+        HHSParser = new ArrayList<String>();
         HHSParser.add("#PATTERN address");
         HHSParser.add("[ $address ]");
         HHSParser.add("#PATTERN price");
@@ -121,6 +242,14 @@ public class GlobalTestInfo {
         HHSParser.add("[ $baths ]");
         HHSParser.add("#PATTERN descriptionText");
         HHSParser.add("[ $description ]");
+        ArrayList<String> selectedSchema = new ArrayList<String>();
+        selectedSchema.add("address");
+        selectedSchema.add("price");
+        selectedSchema.add("beds");
+        selectedSchema.add("baths");
+        selectedSchema.add("description");
+        selectedSchema.add("irrelevant");
+        printKeys.add(selectedSchema);
     }
 
     public String getDHSQuery() {
@@ -158,60 +287,8 @@ public class GlobalTestInfo {
     public ArrayList getZHSParser() {
         return ZHSParser;
     }
-    ArrayList<String> urls = new ArrayList<String>();
-    ArrayList<ArrayList> trees = new ArrayList<ArrayList>();
-    ArrayList<ArrayList> parsers = new ArrayList<ArrayList>();
 
-    public void parseAllData(String u, String t, String p) {
-
-        String[] URLs = u.split("END");
-        for (int i = 0; i < URLs.length; i++) {
-            urls.add(URLs[i].trim());
-            if (debug) {
-                System.out.println("url " + i + " = " + urls.get(i));
-            }
-        }
-
-        String[] treeNodeNames = t.split("END");
-        for (int i = 0; i < treeNodeNames.length; i++) {
-            String[] temp = treeNodeNames[i].split("EL");
-            ArrayList temp2 = new ArrayList();
-            for (int j = 0; j < temp.length; j++) {
-                temp2.add(temp[j].trim());
-            }
-            trees.add(temp2);
-            if (debug) {
-                System.out.println("trees " + i + " = " + toStringArrayList(trees.get(i)));
-            }
-        }
-
-        String[] parsing = p.split("END");
-        for (int i = 0; i < parsing.length; i++) {
-            String[] temp = parsing[i].split("EL");
-            ArrayList temp2 = new ArrayList();
-            for (int j = 0; j < temp.length; j++) {
-                temp2.add(temp[j].trim());
-            }
-            parsers.add(temp2);
-            if (debug) {
-                System.out.println("parsers " + i + " = " + toStringArrayList(parsers.get(i)));
-            }
-        }
-
-    }
-
-    public String getUrls(int num) {
-        return urls.get(num);
-    }
-
-    public ArrayList getTrees(int num) {
-        return trees.get(num);
-    }
-
-    public ArrayList getParsers(int num) {
-        return parsers.get(num);
-    }
-
+    // </editor-fold>
     public String toStringArrayList(ArrayList list) {
         String returnMe = "";
         for (int i = 0; i < list.size(); i++) {
@@ -220,59 +297,21 @@ public class GlobalTestInfo {
         return returnMe.trim();
     }
 
-    /*
-     * To display OnlineDatabases you need a global schema, and the
-     * corresponding words for each OnlineDatabase
-     */
-    public void printWebsite(OnlineDatabases oD, HttpServletResponse response) throws IOException {
-        PrintWriter pw = response.getWriter();
-        pw.println("<HTML><HEAD><TITLE>Search Results</TITLE></HEAD><BODY>");
-        pw.println("<br>");
-
-        if (!oD.isEmpty()) {
-            pw.print("<table border=1px>");
-
-            for (int i = 0; i < GlobalSchema.size(); i++) {
-                pw.print("<th>" + GlobalSchema.get(i) + "</th>");
-            }
-
-            pw.print("</tr>");
-            int i = 0;
-            for (int index = 0; index < oD.size(); index++) {
-                OnlineDatabase temp = oD.get(index);
-                ArrayList<String> tempKeys = printKeys.get(index);
-
-                if (debug) {
-                    System.out.println("Name = " + temp.getName());
-                    System.out.println("tempKeys size  = " + tempKeys.size());
-//                    System.out.println("stored dataKeys " + temp.getSchema());
-                    System.out.println("matched key = " + tempKeys.get(0));
-                }
-
-                for (int j = 0; j < temp.size(); j++) {
-                    if ((i++) % 2 == 0) {
-                        pw.print("<tr BGCOLOR ='#fdf5e6'>");
-                    } else {
-                        pw.print("<tr BGCOLOR ='#c0c0c0'>");
-                    }
-
-                    for (int k = 0; k < tempKeys.size(); k++) {
-                        pw.println("<td>" + temp.get(j).getValue(tempKeys.get(k)) + "</td>");
-                    }
-                    pw.println("</tr>");
-                }
-
-            }
-            pw.print("</table>");
-
-            pw.println("</BODY></HTML>");
-            pw.close();
-
-        } else {
-            pw.println("Your queries do not return any results");
-            pw.println("</BODY>");
-            pw.println("</HTML>");
-
-        }
+    // <editor-fold defaultstate="collapsed" desc="Global get functions">
+    public String getGlobalUrls(int num) {
+        return globalUrls.get(num);
     }
+
+    public ArrayList getGlobalTreeNodeNames(int num) {
+        return globalTreeNodeNames.get(num);
+    }
+
+    public ArrayList getGlobalParsers(int num) {
+        return globalParsers.get(num);
+    }
+
+    public int getGlobalSize() {
+        return globalSize;
+    }
+    // </editor-fold>
 }
