@@ -123,7 +123,7 @@ public class GlobalTestInfo {
 
             }
             pw.print("</table>");
-
+            pw.print("<br /><br /><a href='index.xhtml'>BACK TO MENU</a>");
             pw.println("</BODY></HTML>");
             pw.close();
 

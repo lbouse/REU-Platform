@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>REUCorpus</title>
+    </h:head>
+    
+    <body background="images/background.jpg">
+
+        <script type ="text/javascript">
+            var stuff = new Array();
+            var urlData = "";
+            function addDatabase(){
+                //Enter URL address
+                //This is how you can save input from the user
+                urlData += "URL" + prompt("Enter Database:", "");
+                document.write("Hello " + urlData + "<br/>");
+                stuff[stuff.length] = urlData;
+            }
+        </script>
+        <center>TESTING.<br /><br />
+            <a href="index.xhtml">BACK TO INDEX.</a>
+        </center>
+    </body>
+</html>
