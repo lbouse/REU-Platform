@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>REUCorpus</title>
+        <link rel="stylesheet" href="platformCSS.css" type="text/css" media="screen"/>
+    </h:head>
+    
+    <body background="images/background.jpg">
+        <div id="main">
+            <div class="header">New Project</div>
+            <div class="content">
+                <form action="./Mapping" name="mapping" method="post">
+                    <table>
+                        <tr>
+                            <td>Source Type:</td>
+                            <td><select name="srcTypes">
+                                <option value="database">Database</option>
+                                <option value="excel">Excel</option>
+                                <option value="website">Websites</option>
+                            </select> </td>
+                        </tr><tr>
+                            <td>Project Name:</td>
+                            <td><input type="text" name="projName" /></td>
+                        </tr><tr>
+                            <td colspan="2" align="right">
+                                <input type="hidden" name="step" value="1" />
+                                <input type="submit" value="Next" />
+                            </td>    
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="footer"><a href="index.xhtml">BACK TO INDEX</a></div>
+        </div>
+    </body>
+</html>

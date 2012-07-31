@@ -1,0 +1,36 @@
+/* 
+    Document   : platformCSS
+    Created on : Jul 31, 2012, 10:53:35 AM
+    Author     : Bouse
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#main{
+    width: 300px;
+    margin: 0 auto;
+}
+
+.header{
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-size: 22pt;
+    color: #767670;
+}
+
+.content{
+    position: relative;
+    left: 20px;
+    top: 20px;
+}
+
+.footer{
+    position: absolute;
+    bottom: 20px;
+    width: 200px;
+    margin: 0 auto;
+}
+
