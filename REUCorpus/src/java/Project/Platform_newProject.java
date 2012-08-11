@@ -25,7 +25,7 @@ import org.htmlparser.util.ParserException;
  *
  * @author Bouse
  */
-public class createNewProject extends javax.swing.JFrame {
+public class Platform_newProject extends javax.swing.JInternalFrame {
     //Declaring some public variables.
     private LinkedList<javax.swing.JLabel> userSources = new LinkedList<javax.swing.JLabel>();
     private LinkedList<javax.swing.JButton> sourceButtons = new LinkedList<javax.swing.JButton>();
@@ -40,8 +40,8 @@ public class createNewProject extends javax.swing.JFrame {
     private JTextField destFields[] = new JTextField[5];
     private JTextField sourceAFields[] = new JTextField[5];
     private JTextField sourceBFields[] = new JTextField[5];
-    
-    private String sourceTypes[] = { " Database", " Excel", " XML", " Text", " Website" };
+
+    private String sourceTypes[] = { " Database", " Excel", " Website" };
     private JList sourceJList = new JList(sourceTypes);
     private JTextField projNameField = new JTextField();
     private ButtonGroup destRadioGroup = new ButtonGroup();
@@ -54,7 +54,7 @@ public class createNewProject extends javax.swing.JFrame {
     private JPanel createButtonPanel = new JPanel();    
     
     Border border = LineBorder.createGrayLineBorder();
-    
+        
     private int stepNumber = 0;
     private boolean cellSchema = false;
     private String srcType;
@@ -68,10 +68,9 @@ public class createNewProject extends javax.swing.JFrame {
     private String chosenOrientation;
     
     /**
-     * Creates new form createProject
+     * Creates new form NewJInternalFrame
      */
-    public createNewProject()
-    {
+    public Platform_newProject() {
         initComponents();
         
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -125,7 +124,7 @@ public class createNewProject extends javax.swing.JFrame {
                 } catch (ParserException ex) {
                     Logger.getLogger(createNewProject.class.getName()).log(Level.SEVERE, null, ex);
                 }
-        } });
+        } });        
         
         createButtonPanel.add( Box.createHorizontalGlue() );
         nextBtn.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -135,10 +134,10 @@ public class createNewProject extends javax.swing.JFrame {
         helpBtn.setAlignmentX(Component.RIGHT_ALIGNMENT);
         createButtonPanel.add(helpBtn);        
         
-        buildStepOne();
+        buildStepOne();       
     }
     
-    /* buildStepOne:
+        /* buildStepOne:
      * The first step in creating a new project: The user will select a source type:
      * Database, Excel, XML, Website, or Text
      * and then enter a project name. 
@@ -249,7 +248,7 @@ public class createNewProject extends javax.swing.JFrame {
         mainPanel.add(createButtonPanel);
         mainPanel.revalidate();        
     }/*end build StepTwoA*/
- 
+    
     //Step two, source type "Excel"
     public void buildStepTwoB(final String projName, final String srcType, final int stepNum) throws ClassNotFoundException, SQLException
     {
@@ -325,11 +324,12 @@ public class createNewProject extends javax.swing.JFrame {
                     sourceBFields, sourceADBType, sourceBDBType);
             
             //srcAFields: 0:Host; 1:Port; 2:Database; 3:Username; 4:Password
-            
-            SchemaMapping frame = new SchemaMapping(projName, srcType, sourceADBType,
+            Platform_SchemaMapping frame = new Platform_SchemaMapping(projName, srcType, sourceADBType,
                     sourceBDBType, j.tblNamesA, j.tblNamesB, j.srcAFields, j.srcBFields);
+            getDesktopPane().add(frame);
             frame.setVisible(true);
-            dispose();         
+            frame.show();
+            dispose();
         }
         else{ JOptionPane.showMessageDialog(null, "Error in: buildStepThreeA\n"
                 + "Invalid destination choice specified."); }
@@ -495,7 +495,7 @@ public class createNewProject extends javax.swing.JFrame {
         createButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(createButtonPanel);
         mainPanel.revalidate();
-    }    
+    } 
     
     public void buildStepFour()
     {
@@ -506,8 +506,11 @@ public class createNewProject extends javax.swing.JFrame {
         else if( srcType.equals(" Excel") )
         {
             //srcAFields: 0:Host; 1:Port; 2:Database; 3:Username; 4:Password
-            SchemaMapping frame = new SchemaMapping(projName, srcType, exlFileA, exlFileB, chosenOrientation, true);
+            Platform_SchemaMapping frame = new Platform_SchemaMapping( 
+                    projName, srcType, exlFileA, exlFileB, chosenOrientation, true );
+            getDesktopPane().add(frame);
             frame.setVisible(true);
+            frame.show();
             dispose();             
         }
         
@@ -640,8 +643,7 @@ public class createNewProject extends javax.swing.JFrame {
         createButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         mainPanel.add(createButtonPanel);
         mainPanel.revalidate();        
-    }            
-    
+    }  
     
     //checkRequired:
     //Makes sure the current step has submitted the required fields
@@ -707,14 +709,13 @@ public class createNewProject extends javax.swing.JFrame {
                     "Are you sure you want to cancel?", JOptionPane.YES_NO_OPTION );
             
             if( option == JOptionPane.YES_OPTION )
-            { System.exit(0); }
+            { this.dispose(); }
         }
         else if(e.getActionCommand() == "Help")
         {   //Create instance of "Help" JFrame class
             //new projectHelp().setVisible(true);
         }
     }
-    
     
     /*Action Listener for radio Buttons*/
     public void radioEvent(ActionEvent e)
@@ -803,7 +804,7 @@ public class createNewProject extends javax.swing.JFrame {
             }
     
     }/* end public method buildDBConnectPanel() */
-    
+   
     public void buildSourceDBPanels()
     {
 //*******       //BUILD FORM FOR SOURCE A
@@ -997,31 +998,38 @@ public class createNewProject extends javax.swing.JFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
+
+//    /**
+//     * This method is called from within the constructor to initialize the form.
+//     * WARNING: Do NOT modify this code. The content of this method is always
+//     * regenerated by the Form Editor.
+//     */
+//    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Create New Project");
+        setClosable(true);
+        setResizable(true);
+        setPreferredSize(new java.awt.Dimension(517, 349));
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 497, Short.MAX_VALUE)
+            .addGap(0, 481, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 338, Short.MAX_VALUE)
+            .addGap(0, 298, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -1029,25 +1037,15 @@ public class createNewProject extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) throws ClassNotFoundException, SQLException {
-       
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new createNewProject().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel mainPanel;
     // End of variables declaration//GEN-END:variables
+
 }

@@ -14,12 +14,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-
 /**
  *
  * @author Bouse
  */
-public class saveProject extends javax.swing.JFrame {
+public class Platform_saveProject extends javax.swing.JInternalFrame {
 /*******************************************************************************
 **                                  VARIABLES                                 **
 *******************************************************************************/
@@ -44,15 +43,17 @@ public class saveProject extends javax.swing.JFrame {
     private String excelFiles[];
     private LinkedList<sourceNode> localSchema = new LinkedList<sourceNode>();
     private LinkedList<linkNode> schemaLinks = new LinkedList<linkNode>();
-
+    
 /*******************************************************************************
 **                                CONSTRUCTORS                                **
 *******************************************************************************/    
     /**
      * Creates new form saveProject
      */
-    public saveProject() 
-    {
+    /**
+     * Creates new form Platform_saveProject
+     */
+    public Platform_saveProject() {
         projName = new String("Example");
         sourceCnt = 0;
         initComponents();
@@ -109,9 +110,9 @@ public class saveProject extends javax.swing.JFrame {
         saveButtonPanel.add(helpBtn);
         
         buildStepOne();
-    }
-    
-    public saveProject(String pName, int srcCnt, String dTypes[], List<String[]> dbConns,
+    }//end Platform_saveProject()    
+
+    public Platform_saveProject(String pName, int srcCnt, String dTypes[], List<String[]> dbConns,
             String exlFiles[], LinkedList<sourceNode> lSchemas, LinkedList<linkNode> sLinks)
     {
         projName = new String(pName);
@@ -174,7 +175,7 @@ public class saveProject extends javax.swing.JFrame {
         
         buildStepOne();
     }/* end constructor saveProject */
-    
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -186,17 +187,18 @@ public class saveProject extends javax.swing.JFrame {
 
         mainPanel = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setClosable(true);
+        setResizable(true);
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 380, Short.MAX_VALUE)
+            .addGap(0, 430, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+            .addGap(0, 298, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -218,6 +220,9 @@ public class saveProject extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel mainPanel;
+    // End of variables declaration//GEN-END:variables
 
 /*******************************************************************************
 **                              BUILDING STEPS                                **
@@ -264,7 +269,7 @@ public class saveProject extends javax.swing.JFrame {
         mainPanel.revalidate();        
     }/* end buildStepOne */
     
-    private void buildStepTwo() throws ClassNotFoundException, SQLException
+        private void buildStepTwo() throws ClassNotFoundException, SQLException
     {//Remove all from mainPanel; make sure the slate is clean.
         mainPanel.removeAll();
         mainPanel.repaint();
@@ -286,12 +291,12 @@ public class saveProject extends javax.swing.JFrame {
             nextBtn.addActionListener(new java.awt.event.ActionListener(){
                 public void actionPerformed(ActionEvent e) {
                     /* Check to make sure user specified two files */
-                    if( !s.checkAll() ){
+//                    if( !s.checkAll() ){
                         DBconnectDest = new String[DBfields]; //Clear current array
                         DBconnectDest[0] = new String(s.sourceADBType);
                         for(int i = 0; i < DBfields-1; i++)//Get the database connection information
                         { DBconnectDest[i+1] = new String( s.sourceAFields[i].getText() ); }
-                    }else{ JOptionPane.showMessageDialog(null, "ERROR!\nField left blank."); }
+//                    }else{ JOptionPane.showMessageDialog(null, "ERROR!\nField left blank."); }
                 } 
             });            
         }
@@ -368,7 +373,7 @@ public class saveProject extends javax.swing.JFrame {
         mainPanel.add(saveButtonPanel);        
         mainPanel.revalidate();             
     }/* end buildStepThree */
-    
+   
     private void buildStepFour()
     {
         mainPanel.removeAll();
@@ -380,9 +385,9 @@ public class saveProject extends javax.swing.JFrame {
         JPanel linksPanel = new JPanel();
         linksPanel.setLayout( new BoxLayout(linksPanel, BoxLayout.Y_AXIS) );
         JTextArea linksText = new JTextArea();
-        linksText.setText("LIST OF LINKS CREATED::\n");
-        for(int i = 0; i < schemaLinks.size(); i++)
-        { linksText.append(schemaLinks.get(i).toString()); }
+        linksText.setText("New Global Schema::\n");
+//        for(int i = 0; i < schemaLinks.size(); i++)
+//        { linksText.append(schemaLinks.get(i).toString()); }
         linksText.setAlignmentX(Component.LEFT_ALIGNMENT);
         linksPanel.add(linksText);
 
@@ -393,7 +398,7 @@ public class saveProject extends javax.swing.JFrame {
       //---------
         
         //Begin Global Schema Generation
-        LinkedList<GlobalSchemaNode> gSchemaList = new LinkedList<GlobalSchemaNode>();
+        LinkedList<saveProject.GlobalSchemaNode> gSchemaList = new LinkedList<saveProject.GlobalSchemaNode>();
         LinkedList<linkNode> linkList = schemaLinks;
         LinkedList<fieldNode> queue = new LinkedList<fieldNode>();
         LinkedList<fieldNode> listA = new LinkedList<fieldNode>();
@@ -413,7 +418,7 @@ public class saveProject extends javax.swing.JFrame {
             System.out.print( "linkList(" + i + "), ");
             if( !linkList.get(i).nodeA.completed && !linkList.get(i).nodeB.completed)
             {
-                gSchemaList.add(new GlobalSchemaNode( linkList.get(i).nodeA.getTitle() ));
+                gSchemaList.add(new saveProject.GlobalSchemaNode( linkList.get(i).nodeA.getTitle() ));
                 
                 queue.add(linkList.get(i).nodeA);
                 queue.add(linkList.get(i).nodeB);     
@@ -477,30 +482,9 @@ public class saveProject extends javax.swing.JFrame {
     }/* end buildStepFour */
 
 /*******************************************************************************
-**                                    MAIN                                    **
-*******************************************************************************/    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /*
-         * Create and display the form
-         */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new saveProject().setVisible(true);
-            }
-        });
-    }
-    
-/*******************************************************************************
 **                               METHODS: GENERAL                             **
 *******************************************************************************/    
     
-/* optionBtnEvent
- * Triggered when one of the three buttons at bottom of frame is pressed.
- */
     private void optionBtnEvent(ActionEvent e) throws ClassNotFoundException, SQLException
     {
         if( e.getActionCommand().equals("Next") )
@@ -530,6 +514,8 @@ public class saveProject extends javax.swing.JFrame {
                     break;
             }/*switch(stepNumber)*/
         }/*if( e == "Next")*/
+        else if(e.getActionCommand().equals("Cancel"))
+        { dispose(); }
     }/* end method private void optionBtnEvent */
     
     private boolean passCheck()
@@ -540,11 +526,11 @@ public class saveProject extends javax.swing.JFrame {
         { //Check passes if a save format is selected
             if(!selectedSaveFormat.isEmpty()){ ans = true; }
         }
-        if(stepNumber == 2)
+        else if(stepNumber == 2)
         { //Check if Excel documents are selected or Database information
             ans = true;            
         }
-        if(stepNumber == 3)
+        else if(stepNumber == 3)
         { //Check if all options are selected
             if( !selectedNameOption.isEmpty() && !selectedAttributeOption.isEmpty() )
             { ans = true; }
@@ -552,12 +538,12 @@ public class saveProject extends javax.swing.JFrame {
         else{ JOptionPane.showMessageDialog(null, "ERROR!\n"
                 + "Invalid stepNumber: " + stepNumber + " in passCheck."); }
         
-        return ans;
+        return true; //FIX LATER. PRETEND EVERYTHING'S FINE FOR NOW.
     }
-    
+   
     //Returns a linked list of indexes of the nodes in this list.
     //Index correlates to the index of this node in the linked list of linkNodes
-    public LinkedList<Integer> findNodes(LinkedList<nodeList> lst, String findMe)
+    public LinkedList<Integer> findNodes(LinkedList<saveProject.nodeList> lst, String findMe)
     {
         LinkedList<Integer> rtnList = new LinkedList<Integer>();
 
@@ -569,7 +555,7 @@ public class saveProject extends javax.swing.JFrame {
 
         return rtnList;
     }
-
+    
 /*******************************************************************************
 **                         GENERATING GLOBAL SCHEMA                           **
 *******************************************************************************/          
@@ -578,7 +564,7 @@ public class saveProject extends javax.swing.JFrame {
 **                               INNER CLASSES                                **
 *******************************************************************************/  
     
-  //Each GlobalSchemaNode is a set of related fieldNodes
+      //Each GlobalSchemaNode is a set of related fieldNodes
     public static class GlobalSchemaNode{
         private String fieldName;
         public LinkedList<fieldNode> relationalList = new LinkedList<fieldNode>();
@@ -600,7 +586,6 @@ public class saveProject extends javax.swing.JFrame {
             return temp;
         }
     }
-    
     public static class nodeList{
         private String listName;
         private String nodeName;
@@ -629,8 +614,6 @@ public class saveProject extends javax.swing.JFrame {
         }
         
     }
+ 
     
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel mainPanel;
-    // End of variables declaration//GEN-END:variables
 }

@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Project;
 
 import java.awt.*;
@@ -20,16 +24,11 @@ import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author Bouse
  */
-public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
+public class Platform_SchemaMapping extends javax.swing.JInternalFrame implements MouseListener{
     //-------------------------------------------------------
     //Declare misc variables
     //-------------------------------------------------------
@@ -58,21 +57,18 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
     private fieldNode[] selectedNodes = {new fieldNode(), new fieldNode()};
     private int fieldCnt;
     private int outer = 0;
-    private int inner = 0;
-    
-    /**
-     * Creates new form NewJFrame
-     */
+    private int inner = 0;    
+
     //Empty constructor. Since we don't want an empty project, forces user to create one.
-    public SchemaMapping() {        
+    public Platform_SchemaMapping() {        
         // Force user to create a project, then scrap this one.
         createNewProject frame = new createNewProject();
         frame.setVisible(true);
         dispose();
-    }    
+    }  
     
     //SchemaMapping constructor for Database
-    public SchemaMapping( String pName, String sourceType, String srcADBType,
+    public Platform_SchemaMapping( String pName, String sourceType, String srcADBType,
             String srcBDBType, ArrayList tblA, ArrayList tblB, String[] dbAFields,
             String[] dbBFields) throws ClassNotFoundException, SQLException
     {
@@ -140,7 +136,7 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
     }/* End SchemaMapping constructor for DB */
     
     // SchemaMapping constructor for Excel
-    public SchemaMapping(String pName, String sourceType, String xlFileA, String xlFileB, String orientation,
+    public Platform_SchemaMapping(String pName, String sourceType, String xlFileA, String xlFileB, String orientation,
             boolean cellSchema)
     {
         initComponents();
@@ -260,24 +256,22 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         else{ JOptionPane.showMessageDialog(null, "ERROR! Invalid source type.\n"
                 + "Error source: SchemaMapping constructor for Excel");
         }
-    }
-   
+    }//end SchemaMapping constructor for Excel    
 
 /*******************************************************************************
 **                             METHODS: GENERAL                               **
 *******************************************************************************/ 
-         /** Copied from javax.swing.table.AbstractTableModel,
-         * to name columns using spreadsheet conventions:
-         *  A, B, C, . Z, AA, AB, etc.
-         */
-        public String getColumnName(int column) {
-            String result = "";
-            for (; column >= 0; column = column / 26 - 1) {
-                result = (char)((char)(column%26)+'A') + result;
-            }
-            return result;
+        /** Copied from javax.swing.table.AbstractTableModel,
+        * to name columns using spreadsheet conventions:
+        *  A, B, C, . Z, AA, AB, etc.
+        */
+    public String getColumnName(int column) {
+        String result = "";
+        for (; column >= 0; column = column / 26 - 1) {
+            result = (char)((char)(column%26)+'A') + result;
         }
-    
+        return result;
+    }
     
     public void mouseReleased(MouseEvent e)
     {
@@ -336,7 +330,7 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
                 }
             }            
         }
-    }
+    }//end mouseReleased
     
     public void selectLabel( fieldNode node, int cnt )
     {
@@ -362,21 +356,6 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
             selectedNodes[1].setOpaque(true);
             if(linkList.size() > 0){linkList.getLast().setSelected(false);}            
         }
-            
-//        if(!selectedNodes[0].getSelectedStatus())
-//        {   
-//            selectedNodes[0] = node;
-//            selectedNodes[0].setBackground( new Color(238, 221, 130) );
-//            selectedNodes[0].setOpaque(true);
-//            if(linkList.size() > 0){linkList.getLast().setSelected(false);}
-//        }
-//        //else if(!selectedNodes[1].getSelectedStatus())
-//        else
-//        {   
-//            selectedNodes[1] = node;
-//            selectedNodes[1].setBackground( new Color(238, 221, 130));
-//            selectedNodes[1].setOpaque(true);
-//        }
 
         //If there are two nodes selected, draw a line between them
         if(selectedNodes[0].getSelectedStatus() && selectedNodes[1].getSelectedStatus())
@@ -443,6 +422,8 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         return new Point(pnt.x + src1X, pnt.y + sourcePanels.get(src1).sourcePanel.getY());
     }
     
+    
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -455,21 +436,10 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         mainPanel = new javax.swing.JPanel();
         matchingScrollPanel = new javax.swing.JScrollPane();
         matchingPanel = new javax.swing.JPanel();
-        optionPanel = new javax.swing.JPanel();
-        newProject = new javax.swing.JLabel();
-        openProject = new javax.swing.JLabel();
-        saveProject = new javax.swing.JLabel();
-        addMatch = new javax.swing.JLabel();
-        removeMatch = new javax.swing.JLabel();
-        help = new javax.swing.JLabel();
-        projectSettings = new javax.swing.JLabel();
-        menuBar = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        helpMenu = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("SCHEMA MATCHING");
+        setClosable(true);
+        setMaximizable(true);
+        setResizable(true);
 
         matchingScrollPanel.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -488,121 +458,24 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
 
         matchingScrollPanel.setViewportView(matchingPanel);
 
-        optionPanel.setBackground(new java.awt.Color(255, 255, 255));
-        optionPanel.setForeground(new java.awt.Color(51, 51, 51));
-
-        newProject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/new_project.png"))); // NOI18N
-        newProject.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                newProjectMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                newProjectMouseExited(evt);
-            }
-        });
-
-        openProject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/open_project.png"))); // NOI18N
-
-        saveProject.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/save_project.png"))); // NOI18N
-        saveProject.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                saveProjectMouseClicked(evt);
-            }
-        });
-
-        addMatch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/add_match.png"))); // NOI18N
-        addMatch.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addMatchMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                addMatchMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                addMatchMouseExited(evt);
-            }
-        });
-
-        removeMatch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/remove_match.png"))); // NOI18N
-        removeMatch.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                removeMatchMouseClicked(evt);
-            }
-        });
-
-        help.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/help.png"))); // NOI18N
-
-        projectSettings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Project/images/proj_settings.png"))); // NOI18N
-
-        javax.swing.GroupLayout optionPanelLayout = new javax.swing.GroupLayout(optionPanel);
-        optionPanel.setLayout(optionPanelLayout);
-        optionPanelLayout.setHorizontalGroup(
-            optionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(optionPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(newProject)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(openProject)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(saveProject)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(addMatch)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(removeMatch)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(projectSettings)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(help)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        optionPanelLayout.setVerticalGroup(
-            optionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(optionPanelLayout.createSequentialGroup()
-                .addGroup(optionPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(newProject)
-                    .addComponent(openProject)
-                    .addComponent(saveProject)
-                    .addComponent(addMatch)
-                    .addComponent(removeMatch)
-                    .addComponent(help)
-                    .addComponent(projectSettings))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(optionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(matchingScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+            .addComponent(matchingScrollPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 946, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addComponent(matchingScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(optionPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(matchingScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 831, Short.MAX_VALUE)
         );
-
-        jMenu1.setMnemonic('f');
-        jMenu1.setText("File");
-        menuBar.add(jMenu1);
-
-        jMenu2.setMnemonic('e');
-        jMenu2.setText("Edit");
-        menuBar.add(jMenu2);
-
-        helpMenu.setMnemonic('h');
-        helpMenu.setLabel("Help");
-        menuBar.add(helpMenu);
-
-        setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -611,8 +484,13 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JPanel matchingPanel;
+    private javax.swing.JScrollPane matchingScrollPanel;
+    // End of variables declaration//GEN-END:variables
 
-    private void addMatch()
+        private void addMatch()
     {
         if( selectedNodes[0].getSelectedStatus() && selectedNodes[1].getSelectedStatus() )
         {
@@ -643,7 +521,7 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         }
         else{ JOptionPane.showMessageDialog(null, "There are less than two nodes currently selected."); }
     }//end addMatch
-    
+        
    //---------------------------------------------------------
    // The following methods were used from ReadExcelGUI.java
    //---------------------------------------------------------
@@ -682,121 +560,6 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         setCursor(Cursor.getDefaultCursor());
         return sheet;
     }
-      
-/*******************************************************************************
-**                             METHODS: GENERATED                             **
-*******************************************************************************/ 
-    private void addMatchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMatchMouseClicked
-        if( selectedNodes[0].getSelectedStatus() && selectedNodes[1].getSelectedStatus() )
-        {
-            selectedNodes[0].setSelectedStatus(false);
-            selectedNodes[1].setSelectedStatus(false);
-            selectedNodes[0].setOpaque(false);
-            selectedNodes[1].setOpaque(false);
-
-            linkList.add( new linkNode(linkList.size()+1, 
-                            selectedNodes[0].getID(), selectedNodes[1].getID()) );    
-            linkList.getLast().setEndNodes(selectedNodes[0], selectedNodes[1]);
-        }
-        else{ JOptionPane.showMessageDialog(null, "There is less than two nodes currently selected."); }
-        
-       matchingPanel.repaint();
-    }//GEN-LAST:event_addMatchMouseClicked
-
-    private void newProjectMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newProjectMouseEntered
-            Border border = LineBorder.createGrayLineBorder();
-            newProject.setBorder(border);
-    }//GEN-LAST:event_newProjectMouseEntered
-
-    private void newProjectMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_newProjectMouseExited
-            Border border = javax.swing.BorderFactory.createEmptyBorder();
-            newProject.setBorder(border);
-    }//GEN-LAST:event_newProjectMouseExited
-
-    private void addMatchMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMatchMouseEntered
-            Border border = LineBorder.createGrayLineBorder();
-            addMatch.setBorder(border);
-    }//GEN-LAST:event_addMatchMouseEntered
-
-    private void addMatchMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMatchMouseExited
-            Border border = LineBorder.createGrayLineBorder();
-            addMatch.setBorder(border);
-    }//GEN-LAST:event_addMatchMouseExited
-
-    private void removeMatchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeMatchMouseClicked
-        boolean deleted = false;
-        Graphics g;
-        
-        for(int i = 0; i < linkList.size(); i++)
-        {
-            if(linkList.get(i).isSelected())
-            {
-                int x1 = linkList.getLast().nodeA.getPoint().x;
-                int y1 = linkList.getLast().nodeA.getPoint().y;
-                int x2 = linkList.getLast().nodeB.getPoint().x;
-                int y2 = linkList.getLast().nodeB.getPoint().y;
-            
-                g = matchingPanel.getGraphics();            
-                g.setColor(defaultGray);
-                g.drawLine(x1, y1, x2, y2);
-                
-                linkList.get(i).nodeA.setBackground(defaultGray);
-                linkList.get(i).nodeB.setBackground(defaultGray); 
-                
-                linkList.remove(i);
-                deleted = true;
-            }
-        }
-        if( !deleted ){ JOptionPane.showMessageDialog(null, "No link selected!"); }
-    }//GEN-LAST:event_removeMatchMouseClicked
-
-    private void saveProjectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveProjectMouseClicked
-        String temp[] = { srcType, srcType };
-        List<String[]> tempDBConnects = new ArrayList<String[]>();
-        String exlFiles[];
-        
-        if( srcType.equals(" Database") )
-        {
-            String temp2[] = new String[6];
-            temp2[0] = dbAType;
-            for(int i = 0; i < dbAConnect.length; i++)
-            { temp2[i+1] = dbAConnect[i]; }
-            tempDBConnects.add(temp2);
-            
-            temp2 = new String[6];
-            temp2[0] = dbBType;
-            for(int i = 0; i < dbBConnect.length; i++)
-            { temp2[i+1] = dbBConnect[i]; }
-            tempDBConnects.add(temp2);
-            
-            exlFiles = new String[] {"NA", "NA"};
-        }
-        else if( srcType.equals(" Excel") )
-        {
-            String temp2[] = new String[6];
-            temp2[0] = "NA";
-            tempDBConnects.add(temp2);
-            tempDBConnects.add(temp2);
-            
-            if( !exlFileA.isEmpty() && !exlFileB.isEmpty() )
-            { exlFiles = new String[] {exlFileA, exlFileB}; }
-            else{ exlFiles = new String[] {"NA", "NA"}; }
-        }
-        else
-        {
-            String temp2[] = new String[6];
-            temp2[0] = "NA";
-            tempDBConnects.add(temp2);
-            tempDBConnects.add(temp2);
-            
-            exlFiles = new String[] {"NA", "NA"};            
-        }
-        
-    /*(String pName, int srcCnt, String dataTypes[], List<String> dbConnects,
-            String excelFiles[], sourceNode localSchemas[], linkNode schemaLinks[])*/
-        saveProject frame = new saveProject(projName, 2, temp, tempDBConnects, exlFiles, sourcePanels, linkList );
-        frame.setVisible(true);
-    }//GEN-LAST:event_saveProjectMouseClicked
     
     public void paint(Graphics g)     //note paint method
     {   
@@ -814,39 +577,7 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
         }
     }
     
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-
-        /*
-         * Create and display the form
-         */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                new SchemaMapping().setVisible(true);
-            }
-        });
-    }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel addMatch;
-    private javax.swing.JLabel help;
-    private javax.swing.JMenu helpMenu;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JPanel mainPanel;
-    private javax.swing.JPanel matchingPanel;
-    private javax.swing.JScrollPane matchingScrollPanel;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JLabel newProject;
-    private javax.swing.JLabel openProject;
-    private javax.swing.JPanel optionPanel;
-    private javax.swing.JLabel projectSettings;
-    private javax.swing.JLabel removeMatch;
-    private javax.swing.JLabel saveProject;
-    // End of variables declaration//GEN-END:variables
-
+    
  //   @Override
     public void mouseClicked(MouseEvent e) {
     }
@@ -866,6 +597,6 @@ public class SchemaMapping extends javax.swing.JFrame implements MouseListener{
 
 //    @Override
     public void mouseExited(MouseEvent e) {
-    }
-      
-}/* End class SchemaMapping.java */
+    } 
+
+}

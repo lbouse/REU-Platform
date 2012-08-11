@@ -1,5 +1,9 @@
 package MainFiles;
 
+//MappingGUI, for use in formatting web sources to use with the search feature.
+// Not currently in use.
+
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.htmlparser.util.ParserException;
 
-public class Mapping extends HttpServlet {
+public class MappingGUI extends HttpServlet {
 
     //public static PrintWriter out;
 
@@ -41,7 +45,7 @@ public class Mapping extends HttpServlet {
                     out.println("<script type='text/javascript' src='js/jquery.tinyscrollbar.min.js'></script>");
                     out.println("</head></html><body>");
                     out.println("<div id='main'><div class='header'>New Project - Web</div><div class='content'>");
-                    out.println("<form action='./Mapping' name='mapping' method='post'>");
+                    out.println("<form action='./MappingGUI' name='mapping' method='post'>");
 
                     out.println("<input type='text' name='webURL' value='www.example.com/search.php' /> "
                             + "&nbsp; <button type='button' name='addURL' value=' + ' onclick='addSrc()' />");
@@ -145,7 +149,7 @@ public class Mapping extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParserException ex) {
-            Logger.getLogger(Mapping.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MappingGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -165,7 +169,7 @@ public class Mapping extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (ParserException ex) {
-            Logger.getLogger(Mapping.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MappingGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

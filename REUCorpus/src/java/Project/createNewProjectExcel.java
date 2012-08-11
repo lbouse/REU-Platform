@@ -118,13 +118,19 @@ public class createNewProjectExcel {
     //User selects two excel files to open.
     public void buildStepTwo()
     {   
+        dbPanel.add( Box.createRigidArea(new Dimension(0,10)) );
+        JLabel exclLabel = new JLabel("Browse to select two Excel files.");
+        exclLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        dbPanel.add(exclLabel);
+        dbPanel.add(Box.createRigidArea(new Dimension(0,15)) );
+        
         JPanel rowA = new JPanel();
         rowA.setLayout( new BoxLayout(rowA, BoxLayout.X_AXIS) );
         
         fileA.setMaximumSize( new Dimension(200, 20) );
         fileA.setAlignmentX(Component.LEFT_ALIGNMENT);
         rowA.add(fileA);
-        rowA.add( Box.createRigidArea(new Dimension(15,0)) );
+        rowA.add( Box.createRigidArea(new Dimension(10,0)) );
         
         JButton browseA = new JButton("Browse");
         browseA.addActionListener(new java.awt.event.ActionListener() {
@@ -138,7 +144,7 @@ public class createNewProjectExcel {
         rowA.setAlignmentX(Component.LEFT_ALIGNMENT);
         dbPanel.add(rowA);
         
-        dbPanel.add( Box.createRigidArea(new Dimension(0, 20)) );
+        dbPanel.add( Box.createRigidArea(new Dimension(0, 5)) );
         
         JPanel rowB = new JPanel();
         rowB.setLayout( new BoxLayout(rowB, BoxLayout.X_AXIS) );
@@ -146,7 +152,7 @@ public class createNewProjectExcel {
         fileB.setMaximumSize( new Dimension(200, 20) );
         fileB.setAlignmentX(Component.LEFT_ALIGNMENT);
         rowB.add(fileB);
-        rowB.add( Box.createRigidArea(new Dimension(15,0)) );
+        rowB.add( Box.createRigidArea(new Dimension(10,0)) );
         
         JButton browseB = new JButton("Browse");
         browseB.addActionListener(new java.awt.event.ActionListener() {
@@ -169,7 +175,7 @@ public class createNewProjectExcel {
         dbPanel.add(prompt);
         
         JPanel optionsPanel = new JPanel();
-        optionsPanel.setLayout( new BoxLayout(optionsPanel, BoxLayout.X_AXIS) );
+        optionsPanel.setLayout( new BoxLayout(optionsPanel, BoxLayout.Y_AXIS) );
         
         ImageIcon horizontal = new ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REUCorpus\\src\\java\\Project\\images\\horizontal.png");
         ImageIcon vertical = new ImageIcon("C:\\Users\\Bouse\\Documents\\NetBeansProjects\\REU-Platform\\REUCorpus\\src\\java\\Project\\images\\vertical.png");

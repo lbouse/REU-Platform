@@ -8,12 +8,13 @@ import java.awt.Point;
 import java.util.LinkedList;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import org.htmlparser.util.NodeList;
 
 /**
  *
  * @author Bouse
  */
-public class fieldNode extends javax.swing.JLabel {
+public class resultNode extends javax.swing.JLabel {
     //-------------------------------------------------------------------
     //                          DECLARATIONS
     //-------------------------------------------------------------------    
@@ -28,11 +29,8 @@ public class fieldNode extends javax.swing.JLabel {
     private boolean selected = false;
     
     /*Public Variables*/
-    public LinkedList<fieldNode> fieldLinks = new LinkedList<fieldNode>();
-    //For use in creating Global Schema
-    public boolean check = false;
-    public boolean completed = false;
-    
+    public NodeList treeNodes;
+     
     /*Public get&set Methods*/
     public void setID(int x){ fieldID = x; }
     public void setTitle(String x){ fieldTitle = new String(x); }
@@ -57,7 +55,7 @@ public class fieldNode extends javax.swing.JLabel {
     //-------------------------------------------------------------------
     //                          CONSTRUCTORS
     //-------------------------------------------------------------------       
-    public fieldNode(String title, int parentID, int thisID)
+    public resultNode(String title, int parentID, int thisID)
     {
         Border border = LineBorder.createGrayLineBorder();
         setID(thisID);
@@ -71,7 +69,7 @@ public class fieldNode extends javax.swing.JLabel {
         //setPoint(coord);
     }
     
-    public fieldNode()
+    public resultNode()
     {
         setTitle("Empty");
         setSource(0);
